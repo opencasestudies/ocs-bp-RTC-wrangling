@@ -448,7 +448,6 @@ ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
 ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
                    col_types =  cols(male_total_ct = col_double(),
                                    female_total_ct = col_double()))
-head(ps_data)                            
 ```
 
 
@@ -2401,7 +2400,11 @@ length(summary(droplevels(as.factor(LOTT_DF$STATE))))
 ```
 
 
-```{r, echo = FALSE, eval = FALSE}
+Now we will save our wrangled data for the part 2 case study:
+
+We can use the `here()` function of the `here` package to easily save this in a directory called `data` within the directory where are .Rproj file is located.
+
+```{r}
 save(LOTT_DF, DONOHUE_DF, file = here::here("data", "Wrangled_data.rda"))
 ```
 

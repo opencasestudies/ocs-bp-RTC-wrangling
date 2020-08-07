@@ -32,7 +32,7 @@ To cite this case study:
 
 Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub,
 Margaret and Hicks, Stephanie. (2020).
-<a href="https://github.com/opencasestudies/ocs-right-to-carry-case-study" class="uri">https://github.com/opencasestudies/ocs-right-to-carry-case-study</a>.
+<a href="https://github.com/opencasestudies/ocs-bp-RTC-wrangling" class="uri">https://github.com/opencasestudies/ocs-bp-RTC-wrangling</a>.
 Examination of Multicollinearity Influence on Inference Using
 Right-to-Carry Gun Law and Violent Crime Data (Version v1.0.0).
 
@@ -48,7 +48,7 @@ Initiative](https://americanhealth.jhu.edu/) for funding this work.
 ### Title
 
 Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun
-Laws
+Laws Part 1
 
 ### Motivation
 
@@ -215,6 +215,10 @@ They case study also covers using various `map_*()` functions of the
 columns of an individual tibble. This case study provides especially
 diverse material about data wrangling.
 
+See [this case
+study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) for part
+2 which includes the following sections:
+
 #### Data Visualization
 
 This case study demonstrates how to make correaltion plots and scatter
@@ -293,7 +297,8 @@ markdown file (`README.md`).
 
 Instructors can skip the data wrangling and start at the Data
 Exploration section, which gives a brief introduction of the data before
-the Data Analysis section.
+the Data Analysis section, by skipping to this [this case
+study](https://github.com/opencasestudies/ocs-bp-RTC-analysis).
 
 #### Target audience
 
