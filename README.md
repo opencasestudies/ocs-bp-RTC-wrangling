@@ -169,14 +169,14 @@ crime data was downloaded from the
 The skills, methods, and concepts that students will be familiar with by
 the end of this case study are:
 
-<u>**Data science Learning Objectives:**</u>
+<u>**Data Science Learning Objectives:**</u>
 
 1.  Data import of many different file types with special cases
-    (`readr`, `readxl`, `pdftools`).
-2.  Joining data from multiple sources (`dplyr`).
-3.  Working with character strings (`stringr`).
-4.  Data comparisons (`dplyr` and `janitor`).
-5.  Reshaping data into different formats (`tidyr`).
+    (`readr`, `readxl`, `pdftools`)  
+2.  Joining data from multiple sources (`dplyr`)  
+3.  Working with character strings (`stringr`)  
+4.  Data comparisons (`dplyr` and `janitor`)  
+5.  Reshaping data into different formats (`tidyr`)
 
 #### Data import
 

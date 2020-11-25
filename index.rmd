@@ -145,16 +145,16 @@ In this case study we only demonstrate how to import and wrangle the data.
 # **Learning Objectives** 
 *** 
 
-<u>**Data science Learning Objectives:**</u>
+<u>**Data Science Learning Objectives:**</u>
 
-1. Data import of many different file types with special cases (`readr`, `readxl`, `pdftools`).
-2. Joining data from multiple sources (`dplyr`).
-3. Working with character strings (`stringr`).
-4. Data comparisons (`dplyr` and `janitor`).
-5. Reshaping data into different formats (`tidyr`).
+1. Data import of many different file types with special cases (`readr`, `readxl`, `pdftools`)  
+2. Joining data from multiple sources (`dplyr`)  
+3. Working with character strings (`stringr`)  
+4. Data comparisons (`dplyr` and `janitor`)  
+5. Reshaping data into different formats (`tidyr`)  
 
 
-We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr` and `ggplot2`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr` and `ggplot2`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially legible.
 
 ```{r, out.width = "20%", echo = FALSE, fig.align ="center"}
 include_graphics("https://tidyverse.tidyverse.org/logo.png")
