@@ -30,7 +30,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 (
 
 To cite this case study:
 
-Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wrangling. Examination of Multicollinearity Influence on Inference Using Right-to-Carry Gun Law and Violent Crime Data (Version v1.0.0).
+Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wrangling. Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1 (Version v1.0.0).
 
 ### Acknowledgements
 
@@ -45,11 +45,13 @@ Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Par
 
 ### Motivation 
 
-The influence of the implementation of less restrictive right-to-carry gun laws on violent crime is a historically controversial topic. One reason for the contriversy, is concern that some earlier reports examing this topic may have used methods that were inappropriate. 
+The influence of the implementation of less restrictive right-to-carry gun laws on violent crime is a historically controversial topic. One reason for the controversy, is concern that some earlier reports examining this topic may have used methods that were inappropriate. 
 
-One of the major concerns is that an earlier report included multiple demographic variables that were collinear with one another. This resulted in different a very coefficient estimate for right-to-carry gun law adoption than other reports that did not include colinear varaibles. This phenomenon is called [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity), and it can result in abberant findings for particular explanatory variables, despite not altering the overall predictive power of a model.
+One of the major concerns is that an earlier report included multiple demographic variables that were collinear with one another. This resulted in different a very coefficient estimate for right-to-carry gun law adoption than other reports that did not include collinear variables. This phenomenon is called [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity), and it can result in aberrant findings for particular explanatory variables, despite not altering the overall predictive power of a model.
 
-In this case study we use data peform simplified analyses similar to those of reports on this topic to explore the influence of multicolinearity on coeffcient estimate stability. We however, do not recreate the previous analyses. The reports that we use as a guide for our analysis are:
+In the next case study we perform a simplified analysis similar to those of these reports on this topic to explore the influence of multicollinearity on coefficient estimate stability. We however, do not recreate the previous analyses. 
+
+The reports that we use as a guide for our analysis are:
 
 1. John J. Donohue et al., Right‐to‐Carry Laws and Violent Crime: A Comprehensive Assessment Using Panel Data and a State‐Level Synthetic Control Analysis. *Journal of Empirical Legal Studies*, 16,2 (2019).
 
@@ -61,7 +63,7 @@ In this case study we use data peform simplified analyses similar to those of re
 
 ### Data   
 
-In this case study, we perform analyses similar to those in [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article and the [Lott and Mustard](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} article, however **we do not try to recreate them**, instead we perform simplified analyses to allow us to focus on multicolinearity.
+In this case study, we perform analyses similar to those in [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article and the [Lott and Mustard](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} article, however **we do not try to recreate them**, instead we perform simplified analyses to allow us to focus on multicollinearity.
 
 Therefore we use a subset of the **explanatory variables** used by each article including:   
 
@@ -93,74 +95,59 @@ Finally our outcome of interest is violent crime rates. The violent crime data w
 
 The skills, methods, and concepts that students will be familiar with by the end of this case study are:
 
-<u>**Statistical Learning Objectives:**</u> 
-
-1) what multicollinearity is and how it can influence linear regression coefficients  
-2) how to look for the presence of multicollinarity and determine the severity
-3) the difference between multicollinearity and correlation 
-4) implementation of panel regression analysis (`plm`)
-5) calcuation of VIF (`car`)
-
 <u>**Data science Learning Objectives:**</u>
 
-1) data import of many different file types with special cases (`readr`, `readxl`, `pdftools`)
-2) joining data from multiple sources (`dplyr`)  
-3) working with character strings (`stringr`)
-4) data comparisons (`dplyr` and `janitor`)
-5) reshaping data into different formats (`tidyr`)  
-6) visualizations (`ggplot2`) 
-7) perform iterative simulations (`rsample`)
+1. Data import of many different file types with special cases (`readr`, `readxl`, `pdftools`).
+2. Joining data from multiple sources (`dplyr`).
+3. Working with character strings (`stringr`).
+4. Data comparisons (`dplyr` and `janitor`).
+5. Reshaping data into different formats (`tidyr`).
+
 
 
 #### Data import 
 
-In this case study particularly covers many different types of data import. We cover data import using the Tidyverse `readr` package to import the various types of text files, the Tidyverse `readxl` package to import excel files, and the Tidyverse `pdftools` package to import a PDF file. We demonstrate special cases where header rows need to be skipped, or colum data types need to be specified. We also use the the `list.files()` base function together with the `map()` function of the Tidyverse `purrr` package to efficiently perform data importation of multiple files with one command.
+In this case study particularly covers many different types of data import. We cover data import using the Tidyverse `readr` package to import the various types of text files, the Tidyverse `readxl` package to import excel files, and the Tidyverse `pdftools` package to import a PDF file. We demonstrate special cases where header rows need to be skipped, or column data types need to be specified. We also use the the `list.files()` base function together with the `map()` function of the Tidyverse `purrr` package to efficiently perform data importation of multiple files with one command.
 
 #### Data wrangling
 
-This case study is covers many details about wrangling data from excel files with unusual header structures and with similar data in multiple tables within the same file. This involves using the `stringr` package to split, subset, detect, extract, and modify patterns of text. This also involves using the `tidyr` package to change data shape and using the `dplyr` package to summarise, select, filter, modify, and join data. They case study also covers using various `map_*()` functions of the `purrr` package to perform functions across tibbles within lists and the `across()` function of the `dplyr` package to perform functions across columns of an individual tibble. This case study provides especially diverse material about data wrangling.
+This case study is covers many details about wrangling data from excel files with unusual header structures and with similar data in multiple tables within the same file. This involves using the `stringr` package to split, subset, detect, extract, and modify patterns of text. This also involves using the `tidyr` package to change data shape and using the `dplyr` package to summarize, select, filter, modify, and join data. They case study also covers using various `map_*()` functions of the `purrr` package to perform functions across tibbles within lists and the `across()` function of the `dplyr` package to perform functions across columns of an individual tibble. This case study provides especially diverse material about data wrangling.
 
 
 See [this case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) for part 2 which includes the following sections:
 
 #### Data Visualization
 
-This case study demonstrates how to make correaltion plots and scatter plots with error bars. We also show how to add formulas and arrows to plots. The instruction about data visualization assumes that students have some familiarity with `ggplot2`.
+The next [case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) demonstrates how to make correlation plots and scatter plots with error bars. We also show how to add formulas and arrows to plots. The instruction about data visualization assumes that students have some familiarity with `ggplot2`.
 
 ### Analysis
 
-This case study covers balanced panel regression model data analysis with fixed effects. In doing so we provide an introduction to longitudinal analysis in general, as well as use of the `plm` package. We also show how to calculate [Variance inflation factor (VIF)](https://en.wikipedia.org/wiki/Variance_inflation_factor) values  using the `car` package to quantify the severity of multicollinearity. As another assesment of multicollinearity, we demonstrate how to perform simulations to evaluate the stability of coefficient estimates.
+The next [case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) covers balanced panel regression model data analysis with fixed effects. In doing so we provide an introduction to longitudinal analysis in general, as well as use of the `plm` package. We also show how to calculate [Variance inflation factor (VIF)](https://en.wikipedia.org/wiki/Variance_inflation_factor) values  using the `car` package to quantify the severity of multicollinearity. As another assessment of multicollinearity, we demonstrate how to perform simulations to evaluate the stability of coefficient estimates.
 
 ### Other notes and resources 
-
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
-[Writing functions](https://r4ds.had.co.nz/functions.html){target="_blank"}   
-Also see [this case study](https://opencasestudies.github.io/ocs-bloomberg-vaping-case-study/){target="_blank"} for more information on writing functions      
-Please see [this case study](https://opencasestudies.github.io/ocs-bp-co2-emissions/){target="_blank"}  for more details on using `ggplot2`     
-[Longitudinal studies](https://www.bmj.com/about-bmj/resources-readers/publications/epidemiology-uninitiated/7-longitudinal-studies){target="_blank"}   
-[Panel data](https://en.wikipedia.org/wiki/Panel_data){target="_blank"}    
-[Confidence intervals](https://en.wikipedia.org/wiki/Confidence_interval){target="_blank"}   
-[Linear regression](https://en.wikipedia.org/wiki/Linear_regression){target="_blank"}  
-[panel regression analysis](https://en.wikipedia.org/wiki/Panel_analysis){target="_blank"}   
-[Hausmen test](https://en.wikipedia.org/wiki/Durbin%E2%80%93Wu%E2%80%93Hausman_test){target="_blank"} 
-[Resampling](https://en.wikipedia.org/wiki/Resampling_(statistics)){target="_blank"}   
-[Variance inflation factor (VIF)](https://en.wikipedia.org/wiki/Variance_inflation_factor){target="_blank"}   
-[$R^2$ coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination){target="_blank"}   
-[Ridge regression](https://en.wikipedia.org/wiki/Tikhonov_regularization){target="_blank"}  
-[LaTeX mathematical notation](https://www.calvin.edu/~rpruim/courses/s341/S17/from-class/MathinRmd.html)target="_blank"}   
-
-For more information on linear regression see this [book](https://rafalab.github.io/dsbook/linear-models.html#linear-regression-in-the-tidyverse){target="_blank"} and this [case study](https://opencasestudies.github.io/ocs-bp-diet/){target="_blank"}.
-
-For more information on the different types of panel regression models see this [book](https://bookdown.org/ccolonescu/RPoE4/panel-data-models.html),  [here](https://www.bauer.uh.edu/rsusmel/phd/ec1-15.pdf), and [here](https://sites.google.com/site/econometricsacademy/econometrics-models/panel-data-models).
-
-For more information on implementing panel regession in R using the `plm` package, see [here](https://cran.r-project.org/web/packages/plm/vignettes/plmPackage.html){target="_blank"}  and [here](http://www.princeton.edu/~otorres/Panel101R.pdf){target="_blank"}.
-
-For more information on multioclinearity and VIF, see this [article](https://link.springer.com/content/pdf/10.1007/s11135-006-9018-6.pdf){target="_blank"}.DOI 10.1007/s11135-006-9018-6
 
 The articles used to motivate this case study are:   
-[Lott and Mustard](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"}  
+[Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"}  
 [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"}     
 [See here for a list of studies on this topic ](https://en.wikipedia.org/wiki/More_Guns,_Less_Crime){target="_blank"}  
+
+<u>**Packages used in this case study:** </u>
+
+Package   | Use in this case study                                                                        
+---------- |-------------
+[here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
+[readxl](https://readxl.tidyverse.org/){target="_blank"}      | to import the data in the excel files 
+[readr](https://readr.tidyverse.org/){target="_blank"}      | to import the CSV file data
+[pdftools](https://github.com/ropensci/pdftools){target="_blank"} | to import data from a pdf file
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}      | to arrange/filter/select/compare specific subsets of the data  
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"} | to use the compound assignment pipe operator `%<>%`
+[tidyr](https://tidyr.tidyverse.org/){target="_blank"}      | to rearrange data in wide and long formats 
+[stringr](https://stringr.tidyverse.org/articles/stringr.html){target="_blank"}    | to manipulate the character strings within the data  
+[purrr](https://purrr.tidyverse.org/){target="_blank"}   | to import the data in all the different excel and csv files efficiently
+[forcats](https://forcats.tidyverse.org/){target="_blank"}    | to allow for reordering of factors in plots
+[tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with `dplyr`/`stringr`/`tidyr`/`purrr`
+
 
 #### For users 
 
@@ -168,14 +155,16 @@ There is a [`Makefile`](Makefile) in this folder that allows you to type `make` 
 
 #### For instructors  
 
-Instructors can skip the data wrangling and start at the Data Exploration section, which gives a brief introduction of the data before the Data Analysis section, by skipping to this [this case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis).
+Instructors can skip the Data Import and Data Wrangling and start at the Data Exploration section, which gives a brief introduction of the data before the Data Analysis section, by skipping to this [this case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis).
 
 #### Target audience 
 
-For individuals or classes with some familiarity with regression. See this [case study](https://opencasestudies.github.io/ocs-bp-diet/){target="_blank"} for an introduction to regression. 
+This case study is intended for individuals or classes with some familiarity with R programming.
+
+Part 2 of this case study is intended for individuals or classes with some familiarity with regression. See this [case study](https://opencasestudies.github.io/ocs-bp-diet/){target="_blank"} for an introduction to regression. 
+
 
 #### Suggested homework
 
-Ask students to remove one or more of the demographic variables with high VIF values from the Lott-like panel data and perform the panel linear regression analysis again, as well as cacluate the VIF values. 
+Ask students to import and wrangle similar datasets to those used here.
 
-Ask the students to discuss how this possibly changed the results.

@@ -1,5 +1,5 @@
 ---
-title: "Open Case Studies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws"
+title: "Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1"
 css: style.css
 output:
   html_document:
@@ -60,14 +60,16 @@ This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 [
 
 To cite this case study please use:
 
-Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wranlging. Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws (Version v1.0.0)
+Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wrangling.  Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1 (Version v1.0.0).
 
 # **Motivation**
 *** 
 
-This case study will introduce the topic of [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity){target="_blank"}, which occurs in regression when one or more independent variable can be predicted by other independent varaibles. 
+This case study shows the wrangling performed for another [case study](https://www.opencasestudies.org/ocs-bp-RTC-analysis/).
 
-We will do so by showcasing a real world example where multicollinearity in part resulted in historically controversial and conflicting findings about the influence of the adoption of right-to-carry (RTC) concealed handgun laws on violent crime rates in the United States. 
+This other case study introduces the topic of [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity){target="_blank"}, which occurs in regression when one or more independent variables can be predicted by other independent variables. 
+
+It does so by showcasing a real world example where multicollinearity in part resulted in historically controversial and conflicting findings about the influence of the adoption of right-to-carry (RTC) concealed handgun laws on violent crime rates in the United States.  
 
 We will focus on two articles:
 
@@ -87,17 +89,15 @@ knitr::include_graphics(here("img", "Donohue.png"))
 
 ##### [[source]](https://www.nber.org/papers/w23510.pdf){target="_blank"}
 
-This has been a controversial topic as many other articles also had conflicting results. See [here](https://en.wikipedia.org/wiki/More_Guns,_Less_Crime){target="_blank"} for a list of studies.
+This has been a controversial topic as many other analyses also produced conflicting results. See [here](https://en.wikipedia.org/wiki/More_Guns,_Less_Crime){target="_blank"} for a list of studies.
 
-The [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article discusses how there are many other important methodological aspects besides [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity){target="_blank"} (which occurs when independent varaibles are highly related in a regression analysis) that could account for the historically conflicting results in these previous papers.
+The [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article discusses how there are many other important methodological aspects besides [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity){target="_blank"} (which occurs when predictor or input variables are highly related in a regression analysis) that could account for the historically conflicting results in these previous manuscripts.
 
-In fact, nearly every aspect of the data analysis process was different between the [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} analysis and the [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} analysis.
-
+In fact, nearly every aspect of the data analysis process was different between the [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} and [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} analyses.
 ```{r, echo=FALSE, out.height = '75%', out.width = '75%', fig.align='center'}
 knitr::include_graphics(here("img", "Educational_Graphic1.jpg"))
 ```
 
-AVOCADO: I like the graphic! Should we mention this process is actually investigating the replicability (e.g. this paper https://www.nature.com/articles/s41562-019-0629-z) of the study as starting with the data are different? 
 
 However, we will focus particularly on multicollinearity and how it can influence the results we get from linear regression. 
 Specifically, this analysis will demonstrate how methodological details can be critically influential for our overall conclusions and can result in important policy related consequences. The [Donohue, et al. article]((https://www.nber.org/papers/w23510.pdf){target="_blank"}) will provide a basis for the motivation. 
@@ -123,7 +123,8 @@ knitr::include_graphics(here("img",'Donohue_Table2_edited.png'))
 
 ###### *ML is abbreviated as LM in the source article
 
-**Note**: We are not attempting to re-create the analyses from the original authors. Instead, we aim to use a subset of the listed explanatory variables in this case study to demonstrate multicollinearity. These variables will be consistent for both analyses that we will perform, with the exception that one analysis will have 6 demographic variables like the analysis in the [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article and the other will have 36 demographic variables like the analysis in the [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} article.
+**Note**: We are not attempting to re-create the analyses from the original authors. Instead, we aim to use a subset of the listed explanatory variables in this case study to demonstrate multicollinearity. These variables will be consistent for both analyses that we will perform, with the exception that one analysis will have 6 demographic variables as in the analysis in the [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"} article and the other will have 36 demographic variables, grouping individuals into more specific categories, as in the analysis in the [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"} article.
+
 
 
 # **Main Question**
@@ -132,23 +133,17 @@ knitr::include_graphics(here("img",'Donohue_Table2_edited.png'))
 #### {.main_question_block}
 <b><u> Our main question: </u></b>
 
-What is the effect of multicollinearity on linear regression models when analyzing right to carry laws and violence rates?
+What is the effect of multicollinearity on coefficient estimates from linear regression models when analyzing right to carry laws and violence rates?
 
 ####
 
-Specifically, we will consider the two ways to define the demographic variables (as described above) and investigate how the inclusion of different numbers of age groups influence the results of an analysis of right to carry laws and violence rates.
 
+Specifically, we will consider the two ways to define the demographic variables (as described above) and investigate how the inclusion of different numbers of age groups influences the results of an analysis of right to carry laws and violence rates
+
+In this case study we only demonstrate how to import and wrangle the data.
 
 # **Learning Objectives** 
 *** 
-
-<u>**Statistical Learning Objectives:**</u> 
-
-1. What multicollinearity is and how it can influence linear regression coefficients?
-2. How to look for the presence of multicollinarity and determine the severity?
-3. The difference between multicollinearity and correlation.
-4. Implementation of panel regression analysis (`plm`).
-5. Calculation of VIF (`car`).
 
 <u>**Data science Learning Objectives:**</u>
 
@@ -157,8 +152,6 @@ Specifically, we will consider the two ways to define the demographic variables 
 3. Working with character strings (`stringr`).
 4. Data comparisons (`dplyr` and `janitor`).
 5. Reshaping data into different formats (`tidyr`).
-6. Data visualizations (`ggplot2`).
-7. Sampling subsets of data (`rsample`).
 
 
 We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr` and `ggplot2`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
@@ -186,11 +179,11 @@ However, there are no federal laws about carrying firearms in public.
 
 These laws are created and enforced at the US state level. 
 States vary greatly in their laws about the right to carry firearms. 
-Some require extensive effort to obtain a permit to legally carry a firearm, while other states require very minimal effort to legally carry a firearm.
+Some require extensive effort to obtain a permit to legally carry a firearm, while other states require very minimal effort to do so.
 
 <details> <summary> Click here for more information on history of right-to-carry policies in the US. </summary>
 
-According to [Wikipedia](https://en.wikipedia.org/wiki/History_of_concealed_carry_in_the_U.S.){target="_blank"} about the history of right-to-carry policies in the United States:
+According to the [Wikipedia entry](https://en.wikipedia.org/wiki/History_of_concealed_carry_in_the_U.S.){target="_blank"} about the history of right-to-carry policies in the United States:
 
 > Public perception on concealed carry vs open carry has largely flipped. In the early days of the United States, open carrying of firearms, long guns and revolvers was a common and well-accepted practice. Seeing guns carried openly was not considered to be any cause for alarm. Therefore, anyone who would carry a firearm but attempt to conceal it was considered to have something to hide, and presumed to be a criminal. For this reason, concealed carry was denounced as a detestable practice in the early days of the United States.
 
@@ -212,48 +205,24 @@ knitr::include_graphics(here("img", "RTC_map.png"))
 
 ##### [[source]](https://www.nraila.org/gun-laws/){target="_blank"}
 
-You can see that no state in the US currently has a "Rights Infringed/Non-Issue" law (the gray category) -- meaning that all 50 states in the US allow the right to carry firearms at least in some way. 
+You can see that no state in the US currently (this map is from 2020) has a "Rights Infringed/Non-Issue" law (the gray category) -- meaning that all 50 states in the US allow the right to carry firearms at least in some way. 
 However the level of restrictions is dramatically different from one state to another.
 
 
-AVOCADO: I put this next section in a details clickable box. My sense is that we should delete this information entirely from the case study, but keeping it for now and will come back and decide at the end if we want to keep it after I look through the whole thing. 
-
-<details> <summary> Click here for more information on right-to-carry policies over time. </summary>
-
-Here, you can see how these laws have changed over time around the country:
-```{r, echo=FALSE, out.height = '100%', out.width = '100%', fig.align='center'}
-knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Right_to_Carry%2C_timeline.gif/620px-Right_to_Carry%2C_timeline.gif")
-```
+<details> <summary> Click here for more information about how restrictions vary from one state to another. </summary>
 
 There is variation from state to state even within the same general category:
 
-For example here are the [current carry laws in Idaho](https://www.nraila.org/gun-laws/state-gun-laws/idaho/) which is considered an "Unrestricted - no permit required" state:
+For example here is an abridged version of the [current carry laws in Idaho](https://www.nraila.org/gun-laws/state-gun-laws/idaho/) which is considered an "Unrestricted - no permit required" state:
 
-> Idaho permits the open carrying of firearms.
-
-> Idaho law permits both residents and non-residents who are at least 18 years old to carry concealed weapons, without a carry license, outside the limits of or confines of any city, provided the person is not otherwise disqualified from being issued a license to carry.
-
-> A person may also carry concealed weapons on or about his or her person, without a license, in the person’s own place of abode or fixed place of business, on property in which the person has any ownership or leasehold interest, or on private property where the person has permission to carry from any person who has an ownership or leasehold interest in that property. 
-
-> State law also allows any resident of Idaho or a current member of the armed forces of the United States to carry a concealed handgun without a license to carry, provided the person is over 18 years old and not disqualified from being issued a license to carry concealed weapons under state law. An amendment to state law that takes effect on July 1, 2020 changes the reference in the above law from “a resident of Idaho” to “any citizen of the United States.”  
+> State law ... allows any resident of Idaho or a current member of the armed forces of the United States to carry a concealed handgun without a license to carry, provided the person is over 18 years old and not disqualified from being issued a license to carry concealed weapons under state law. An amendment to state law that takes effect on July 1, 2020 changes the reference in the above law from “a resident of Idaho” to “any citizen of the United States.”  
 
 
-And here are the [current carry laws in Arizona](https://www.nraila.org/gun-laws/state-gun-laws/arizona/) which is also considered an "Unrestricted - no permit required" state:
+And here are is an abridged version of the [current carry laws in Arizona](https://www.nraila.org/gun-laws/state-gun-laws/arizona/) which is also considered an "Unrestricted - no permit required" state:
 
-> Arizona respects the right of law abiding citizens to openly carry a handgun.
-
-> Any person 21 years of age or older, who is not prohibited possessor, may carry a weapon openly or concealed without the need for a license. Any person carrying without a license must acknowledge and comply with the demands of a law enforcement officer when asked if he/she is carrying a concealed deadly weapon, if the officer has initiated an "investigation" such as a traffic stop.
+> Any person 21 years of age or older, who is not prohibited possessor, may carry a weapon openly or concealed without the need for a license...
 
 Notice that citizens in Idaho only need to be 18 to carry a firearm, whereas they must be 21 in Arizona. 
-
-
-In contrast, here is an example of [current carry laws in Maryland](https://www.nraila.org/gun-laws/state-gun-laws/maryland/) which is considered a "Rights Restricted-Very Limited Issue" state:
-
-> Carrying and Transportation in Vehicles
-It is unlawful for any person without a permit to wear or carry a handgun, openly or concealed, upon or about his person.  It is also unlawful for any person to knowingly transport a handgun in any vehicle traveling on public roads, highways, waterways or airways, or upon roads or parking lots generally used by the public. This does not apply to any person wearing, carrying or transporting a handgun within the confines of real estate owned or leased by him, or on which he resides, or within the confines of a business establishment owned or leased by him.
-
-> Permit To Carry
-Application for a permit to carry a handgun is made to the Secretary of State Police. In addition to the printed application form, the applicant should submit a notarized letter stating the reasons why he is applying for a permit.
 
 </details>
 
@@ -272,18 +241,20 @@ Recall that these are the categories of right to carry laws:
 knitr::include_graphics(here("img", "RTC.png"))
 ```
 
-```{r, echo=FALSE, out.height = '100%', out.width = '100%', fig.align='center'}
-knitr::include_graphics(here("img", "RTC_map.png"))
-```
 States with laws of the category rights restricted - very limited issue (red) are considered as not having a permissive right-to-carry law. Recall that no states currently have a rights infringed/non-issue law.
 
-States of all other categories (shall issue, discretionary/reasonable issue, and no permit required) (all shades of blue) are considered the same in our analysis, as having a permissive right-to-carry law.
+States of all other categories (shall issue, discretionary/reasonable issue, and no permit required, all shades of blue) are considered the same in our analysis, as having a permissive right-to-carry law.
 
-3) Because our analysis is an oversimplification, our analysis should not be used for determining policy changes, instead we suggest that users consult with a specialist.
+3) Because our analysis in the next [case study](https://www.opencasestudies.org/ocs-bp-RTC-analysis) is an oversimplification, the results presented here should not be used for determining policy changes; instead we suggest that users interested in such a determination consult with a specialist.
 
-avocado - this is from Michael and very important... not sure how we want to word this...
+4) The inclusion of race as an explanatory variable in an epidemiological study can be useful in certain circumstances. However, there are limitations and issues around defining, determining, and reporting race, as well as in interpreting differences in public health outcomes by race. For more information on this topic, we have included a [link](https://academic.oup.com/epirev/article/22/2/187/456942) to a paper on the use of race as a measure in epidemiology. We include race in this analysis to demonstrate and consider the limitations of what the previous papers have done to analyze the influence of RTC laws on violent crime, with a focus on multicollinearity. Thus in our analysis we have also defined race as was previously done in these papers. Furthermore, we want to point out that reporting analyses about crime with race as a variable can have very unexpected consequences and thus care should be taken. See [here](https://journals.sagepub.com/doi/full/10.1177/0963721418763931) for suggestions. Any association between demographic variables (indicating the proportion of the population from specific race and age groups) and violent crime does not necessarily indicate that the two are linked causally, as aside from the issues presented in the [article]((https://academic.oup.com/epirev/article/22/2/187/456942)), this may instead indicate higher rates of police engagement with certain racial groups due to [racial profling](https://www.aclu.org/other/racial-profiling-definition).
 
-It is important to note that we do not treat race as an objective measure. Despite this, it can be used to advance scientific inquiry. For more information on this topic, we have included a link to a [paper on the use of race as a measure in epidemiology](https://academic.oup.com/epirev/article/22/2/187/456942). 
+The ACLU defines racial profiling as:
+
+>"Racial Profiling" refers to the discriminatory practice by law enforcement officials of targeting individuals for suspicion of crime based on the individual's race, ethnicity, religion or national origin.
+
+***
+
 
 
 We will begin by loading the packages that we will need:
@@ -300,23 +271,10 @@ library(stringr)
 library(purrr)
 library(forcats)
 library(tibble)
-library(car) # vif function
-library(plm) # fixed effect model, linear regression
-library(broom) # tidy output
-library(cowplot) # to produce plot of plots 
-library(GGally)
-library(ggrepel)
-library(scales)
-library(latex2exp)
-library(viridis)
-library(ggcorrplot)
-library(rsample)
-
-set.seed(999)
 ```
 
 
- Package   | Use                                                                         
+  Package   | Use in this case study                                                                        
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}      | to import the data in the excel files 
@@ -329,21 +287,6 @@ set.seed(999)
 [purrr](https://purrr.tidyverse.org/){target="_blank"}   | to import the data in all the different excel and csv files efficiently
 [forcats](https://forcats.tidyverse.org/){target="_blank"}    | to allow for reordering of factors in plots
 [tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with `dplyr`/`stringr`/`tidyr`/`purrr`
-[car](https://cran.r-project.org/web/packages/car/vignettes/embedding.pdf){target="_blank"}  | to calculate VIF values on linear model output
-[plm](https://cran.r-project.org/web/packages/plm/vignettes/plmPackage.html){target="_blank"} | to work with panel data fitting fixed effects and linear regression models
-[broom](https://cran.r-project.org/web/packages/broom/vignettes/broom.html){target="_blank"} | to create nicely formatted model output
-[cowplot](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html){target="_blank"} | to allow plots to be combined 
-[GGally](https://github.com/ggobi/ggally){target="_blank"} | to extend ggplot2 functionality to easily create more complex plots
-[ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"}    | to allow labels in figures not to overlap
-[scales](https://cran.r-project.org/web/packages/scales/scales.pdf){target="_blank"}    | to allow us to look at the colors within the viridis package and to override some ggplot2 defaults for scales and legends
-[latex2exp](https://cran.r-project.org/web/packages/latex2exp/vignettes/using-latex2exp.html){target="_blank"} | to convert latex math formulas to R's plotmath expressions
-[viridis](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html){target="_blank"}    | to make plots with a color palette that is compatible with color blindness
-[ggcorrplot](https://www.rdocumentation.org/packages/ggcorrplot/versions/0.1.3){target="_blank"} | to easily visualize a correlation matrix
-[rsample](https://rsample.tidymodels.org){target="_blank"} | a tidyverse package for easily resampling data 
-
-
-The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
-
 
 # **What are the data?**
 ***
@@ -367,9 +310,8 @@ knitr::include_graphics(here("img", "ourdata.png"))
 ***
 
 
-
-## Demographic and population data
-
+## **Demographic and population data**
+***
 To obtain information about age, sex, and race, and overall population we will use US Census Bureau data, just like both of the articles. The census data is available for different time spans. Here are the links for the years used in our analysis. We will use data from 1977 to 2010.
 
 Data   | Link                                                                        
@@ -381,7 +323,6 @@ Data   | Link
 
 To import the data we will use the `read_csv()` function of the `readr` package for the csv files. In some decades, there are separate files for each year, we will read each of these together using the base `list.files()` function to get all of the names for each file and then the `map()` function of the `purrr` package to apply the `read_csv()` function on all of the file paths in the list created by `list.files()`. For years that are txt files we will use `read_table2()` also for the `readr` package. The `read_table2()` function, unlike the `read_table()`,  allows for any number of white space characters between columns, and the lines can be of different lengths.
 
-AVOCADO I am a bit confused about the last decade... it's only one file but it seems to need map...
 
 ```{r}
 
@@ -415,7 +356,8 @@ head(dem_00_10)
 Notice that the `STATE` variable for the demographic data is numeric. That is because it is encoded by [Federal Information Processing Standard (FIPS) state codes](https://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code){target="_blank". Thus we also need to import data  about FIPS encoding so that we can identify what data corresponds to what state.
 
 
-## State FIPS codes
+## **State FIPS codes**
+***
 
 
 
@@ -433,7 +375,7 @@ STATE_FIPS <- read_xls("docs/State_FIPS_codes/state-geocodes-v2014.xls", skip = 
 (STATE_FIPS)
 ```
 
-## Police staffing data
+## **Police staffing data**
 The following data was downloaded from the [Federal Bureau of Investigation](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs). 
 
 
@@ -452,7 +394,7 @@ ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
 
 
 
-## Unemployment data
+## **Unemployment data**
 
 The following data was downloaded from the [U.S. Bureau of Labor Statistics](https://data.bls.gov/cgi-bin/dsrv?la). 
 
@@ -507,10 +449,8 @@ Now we will make these values the names of the different tibbles within `ue_rate
 names(ue_rate_data) <- ue_rate_names
 ```
 
-## Poverty data
+## **Poverty data**
 Extracted from Table 21 from [US Census Bureau Poverty Data ](https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-people.html)
-
-AVOCado strange issue that both Michael and I had
 
 ```{r}
 
@@ -526,7 +466,7 @@ head(poverty_rate_data)
 
 We can see that this will require some wrangling to make the data more usable. 
 
-## Violent crime
+## **Violent crime**
 
 Violent crime data was obtained from [here](https://www.ucrdatatool.gov/Search/Crime/State/StatebyState.cfm) This data is a bit trickier because of spaces and `/` in the column names, thus the `read_lines()` function of the `readr` package works better than the `read_csv()` function.
 
@@ -543,7 +483,7 @@ head(crime_data)
 
 We can see that this data will also require some wrangling to make it more usable. 
 
-## Right-to-carry data
+## **Right-to-carry data**
 
 This data is extracted from table in [Donohue paper](https://www.nber.org/papers/w23510.pdf) {target="_blank"}. We will use the function `pdf_text()`  of the `pdftools` package to import the pdf document.
 
@@ -566,7 +506,7 @@ Again, this data will also require quite a bit of wrangling.
 
 # **Data Wrangling**
 ***
-## State FIPS codes
+## **State FIPS codes**
 
 Let's first take a look at our state FIPS data to see if it needs any cleaning or reshaping. We should start with this data, because we will need to use it to wrangle some of the other data.
 
@@ -588,7 +528,7 @@ STATE_FIPS
 
 ```
 
-## Demographic and population data
+## **Demographic and population data**
 
 
 <details><summary> Click here to see detailed information about how the demographic data was wrangled </summary>
@@ -1050,7 +990,7 @@ OK, now we are ready to combine all of our demographic data together!
 
 <!-- </details> -->
 
-## Combining demographic data
+## **Combining demographic data**
 
 We can check that the column names are the same for the data for each of the decades by using the `setequal()` function of the `dplyr` package.
 
@@ -1200,7 +1140,7 @@ We can indeed check that we have the correct number of levels for `VARIABLE` usi
  distinct(dem_LOTT, VARIABLE)
 ```
   
-## Combining population Data
+## **Combining population data**
 
 We also have population data for each decade that came from wrangling the demographic data.
 
@@ -1237,13 +1177,12 @@ population_data %>%
   count(YEAR)
 ```
 
-## Police staffing
+## **Police staffing**
 
 <details><summary> Click here to see details about how the police staffing data was wrangled. </summary>
 
 OK, now we will wrangle the police staffing data. We want to limit the data to only the years of interest. Then we will also replace NA values with zero for the `male_total_ct` and `female_total_ct` variables using the `replace_na()` function of the `tidyr` package. We will also, use the `across()` function of the `dplyr` package to select and mutate both of these columns in this way. Since both of these variables have `total_ct` in the name and no other variables do, we can use the `contains()` function of the `dplyr` package to specify that we want to use these columns instead of listing both out.
 
-avocado... why not 2010....
 
 ```{r}
 glimpse(ps_data)
@@ -1391,7 +1330,7 @@ ps_data %<>%
 head(ps_data)
 ```
 
-Avocado not sure why Michael wanted the lag?- could use inside plm function...- conceptually I get why you might want to know how staffing has changed recently... but this does not seem to calculate that...hmmmm
+
 
 ```{r}
 ps_data %<>%
@@ -1407,7 +1346,7 @@ ps_data
 
 
 
-## Unemployment
+## **Unemployment**
 
 The first thing we need to do with the unemployment data is combine the data across the different states.
  We can do that using the `bind_rows()` function of `dplyr` which appends the data together based on the presence of columns with the same name in the different tibbles. We will use the `map_df()` function of the `purrr` package to allow us to do this across each tibble in our list. We will then select just the annual data for each state and year and we will rename our variables to be consistent with some of other data that we are working with. Thus we would like our variables to be `YEAR`, `VALUE` and `VARIABLE` in all caps.
@@ -1428,7 +1367,7 @@ ue_rate_data <- ue_rate_data %>%
 head(ue_rate_data)
 ```
 
-## Poverty rate
+## **Poverty rate**
 
 
 
@@ -1647,84 +1586,12 @@ head(poverty_rate_data)
 
 Looks great! 
 
-AVOCADO this data is per 1000k? 
-
-
-From Michael:
-```{r, eval = FALSE}
-
-poverty_rate_data <-poverty_rate_data2
-notes <- 4
-
-poverty_rate_data2 <- poverty_rate_data[-((dim(poverty_rate_data)[1]-notes+1):dim(poverty_rate_data)[1]),]
-
-states_eq <- 51
-
-extra_col <- 2
-
-rep_rows <- states_eq + extra_col
-
-groups <- (dim(poverty_rate_data)[1])/(rep_rows)
-
-paste(groups - (2018-1980 + 1), "extra groups")
-
-poverty_rate_data$year_group <- rep(1:groups, each=rep_rows)
-
-poverty_rate_data <- poverty_rate_data %>%
-  group_by(year_group) %>%
-  group_split()
-
-head(poverty_rate_data[[1]])
-
-poverty_rate_data <- poverty_rate_data %>%
-  map(~mutate(.,
-              row_id = row_number())) %>%
-  map(~filter(.,row_id != 2)) %>%
-  map(~dplyr::select(.,-row_id))
-
-poverty_rate_data_names <- poverty_rate_data %>%
-  sapply(., "[",1,1, drop=TRUE) %>%
-  str_replace_all(.,"[:space:]","_")
-
-names(poverty_rate_data) <- poverty_rate_data_names
-
-# Recall 2 extra groups. 
-# footnotes available at https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-footnotes/cps-historic-footnotes.html
-
-poverty_rate_data$`2017_(21)` <- NULL
-
-poverty_rate_data$`2013_(19)` <- NULL
-
-poverty_rate_data_names <- poverty_rate_data %>%
-  sapply(., "[",1,1, drop=TRUE) %>%
-  str_sub(., start = 1, end=4)
-
-names(poverty_rate_data) <- poverty_rate_data_names
-
-poverty_rate_data <- poverty_rate_data %>%
-  map_df(bind_rows, .id = "YEAR") %>%
-  dplyr::select(-year_group)
-
-poverty_rate_data <- poverty_rate_data %>%
-    mutate(n_na = rowSums(is.na(.))) 
-
-# This shows that there is systematic missing values stemmingly *solely* from the rows without poverty data and only a label designating the year
-poverty_rate_data %>% 
-  group_by(n_na) %>%
-  tally()
-
-sapply(poverty_rate_data, class)
-
-
-
-colnames(poverty_rate_data)
-```
 
 <!-- </details> -->
 
 
 
-## Violent crime
+## **Violent crime**
 
 
 
@@ -1897,7 +1764,7 @@ crime_data <- crime_data %>%
 
 <!-- </details> -->
 
-## RTC laws
+## **RTC laws**
 
 <details><summary> Click here to see details about how the RTC Law data was wrangled </summary>
 
@@ -2021,7 +1888,7 @@ p_62b <-pull(p_62b, RTC) %>%
 head(p_62b)
 ```
 
-Great! Now we want to put our data in tibble format. To do so we need to bind the rows together. We can do so using the base `rbind()` function. We will use this instead of the `bind_rows()` function of `dplyr` because `rbind()` is less restrictive and allows for columns without names. We will use the base `do.call()` function, so that this is performed along each character string within the list of `p_62b` while maintaining the structure. Then we create a tibble out of this. avocado... describe do.call better... maybe do something tidyverse... 
+Great! Now we want to put our data in tibble format. To do so we need to bind the rows together. We can do so using the base `rbind()` function. We will use this instead of the `bind_rows()` function of `dplyr` because `rbind()` is less restrictive and allows for columns without names. We will use the base `do.call()` function, so that this is performed along each character string within the list of `p_62b` while maintaining the structure. Then we create a tibble out of this. 
 
 ```{r}
 p_62 <- as.tibble(do.call(rbind, p_62b))
@@ -2042,62 +1909,7 @@ RTC <-p_62
 RTC
 ```
 
-avocado why inf? is there are reason? Might need to ask Michael
-
-from Michael
-```{r, eval = FALSE}
-
-p_62b <-pull(p_62b, RTC) %>%
-  str_split( "\\|{1,}") %>% as.data.frame()
-  unlist()
-
-
-
-p_62b <-p_62 %>%
-  mutate(RTC = str_replace_all(pull(., RTC), "\\s{40,}", "|N/A|")) %>%
-   mutate(RTC = str_replace_all(pull(., RTC), "\\s{2,15}", "|"))
-
-p_62b %<>%
-mutate(value = str_split(pull(., value), "\\|{1}"))
-
-read_csv(p_62b$value)  
-
-p_62 <- p_62 %>%
-    apply(1,str_replace_all, "\\s{40,}", "|N/A|") %>%
-    str_replace_all("\\s{2,15}", "|") %>%
-    as.data.frame()
-
-p_62 <- sapply(p_62$., str_split, "\\|{1,}")
-
-sapply(p_62, nchar)
-
-p_62 <- lapply(p_62, function(x) x[nchar(x) > 0]) 
-
-p_62 <- as.data.frame(do.call(rbind, p_62))
-
-rownames(p_62)
-
-rownames(p_62) <- c()
-
-colnames(p_62) <- c("STATE",
-                    "E_Date_RTC",
-                    "Frac_Yr_Eff_Yr_Pass",
-                    "RTC_Date_SA")
-sapply(p_62, class)
-
-p_62 <- p_62 %>%
-  dplyr::select(STATE, RTC_Date_SA) %>%
-  rename("RTC_LAW_YEAR"=RTC_Date_SA) %>%
-  mutate(RTC_LAW_YEAR = as.numeric(RTC_LAW_YEAR)) %>%
-  mutate(RTC_LAW_YEAR = case_when(RTC_LAW_YEAR == 0 ~ Inf,
-                              TRUE ~ RTC_LAW_YEAR))
-
-sapply(p_62, class)
-
-head(p_62)
-```
-
-## Joining Data
+## **Joining Data**
 
 
 Now we will join the data from the different data sets together to create a tibble of data for an analysis that will be similar to the data used by [Donohue et al.](https://www.nber.org/papers/w23510.pdf) {target="_blank"} and [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"}.
@@ -2129,9 +1941,8 @@ checkyear <- function(x) { x %<>% distinct(YEAR) %>% tally() %>% pull(n) }
 map(data_list, checkyear)
 ```
 
-Avocado bind_rows will make `NA` values for the later years beyond 2010 for the datasets that have them... not sure why we are adding these... maybe there is more about that later?
 
-## Donohue, et al.
+## **Donohue, et al.**
 
 We will now bind the demographic data that we made for the Donohue-like analysis called `dem_DONOHUE`, as well as all the other datasets that we have wrangled. This is possible because we have the same column names for each dataset. We will also use the `pivot_wider()` function of the `tidyr` package to change the shape of the data. This will make the data have more columns. Each unique value in the column called `VARIABLE` will be used to make new columns. and the values for each will come from the column called `VALUE`.
 
@@ -2239,57 +2050,11 @@ DONOHUE_DF %<>%
   mutate(Viol_crime_rate_1k = (Viol_crime_count*1000)/Population,
          Viol_crime_rate_1k_log = log(Viol_crime_rate_1k),
          Population_log = log(Population))
-
 ```
 
-From michael:
 
-```{r, eval = FALSE}
- DONOHUE_DF %>%
-   count() %>%
-   filter(n != 51) %>%
-   print(n=dim(.)[1])
 
- summary(as.factor(DONOHUE_DF$STATE))
-
- max(DONOHUE_DF$YEAR) - min(DONOHUE_DF$YEAR) + 1
-
- DONOHUE_DF <- DONOHUE_DF %>%
-   mutate(STATE = fct_collapse(STATE, "District of Columbia"=c("District of Columbia","D.C.")))
-
- summary(as.factor(DONOHUE_DF$STATE))
-  
-length(levels(DONOHUE_DF$STATE))
-
-DONOHUE_DF <- DONOHUE_DF %>%
-  group_by(STATE, YEAR) %>%
-  summarise_all(~na.omit(unique(.))) %>%
-  ungroup() # This identifies unique observations, coalesces rows according to the grouping variable(s), and gets rid of of units that have incomplete data. This gives returns a dataframe with the most complete information.
-
-summary(as.factor(DONOHUE_DF$STATE)) 
-
-baseline_year <- min(DONOHUE_DF$YEAR)
-censoring_year <- max(DONOHUE_DF$YEAR)
-
-# Need to fix this to ensure severe bias is not introduced by prevalent "cases"
-
-DONOHUE_DF <- DONOHUE_DF %>%
-  mutate(TIME_0 = baseline_year,
-         TIME_INF = censoring_year) %>%
-  filter(RTC_LAW_YEAR > TIME_0)
-
-DONOHUE_DF <- DONOHUE_DF %>%
-  mutate(Viol_crime_rate_1k = (Viol_crime_count*1000)/Population,
-         Viol_crime_rate_1k_log = log(Viol_crime_rate_1k),
-         Population_log = log(Population))
-
-summary(droplevels(as.factor(DONOHUE_DF$STATE)))
-
-length(summary(droplevels(as.factor(DONOHUE_DF$STATE))))
-
-```
-
-## Mustard and Lott
+## **Mustard and Lott**
 
 We will now bind the demographic data that we made for the Mustard and Lott analysis called `dem_Lott`, as well as all the other datasets that we have wrangled just as we did for the Donohue-like analysis. Again, this is possible because we have the same column names for each dataset. 
 
@@ -2404,85 +2169,57 @@ Now we will save our wrangled data for the part 2 case study:
 
 We can use the `here()` function of the `here` package to easily save this in a directory called `data` within the directory where are .Rproj file is located.
 
-```{r}
+```{r, eval = FALSE}
 save(LOTT_DF, DONOHUE_DF, file = here::here("data", "Wrangled_data.rda"))
 ```
 
 # **Summary**
 *** 
 
-This case study has introduced the concept of multicollinearity by exploring data related to violent crimes and right-to-carry gun laws. We also introduced the topic of panel data as a special type of longitudinal data that includes data of 2 or more individuals or groups over 2 or more time points. We learned that we can use the `plm` package to perform panel linear regression analysis. We learned that the fixed effect model in panel analysis actually makes the least assumptions, and is therefore often the most appropriate test.
-
-By evaluating two analyses that were identical except for the inclusion of extra demographic variables, analysis 1 included 6, while analysis 2 included 36, we discovered that redundant and collinear variables can change the directionality and magnitude of our findings. 
-
-We learned that by looking at the correlation between pairs of explanatory variables we can get a sense about whether multicollinearity may exist in our data.
-
-We learned that we can evaluate the stability of our coefficient estimates across sub-samples or calculate variance inflation factor (VIF) values to get a sense of the presence and severity of multicollinearity.
-
-We learned that often a rule of thumb of >10 is used as a threshold for raising concern about the severity of multicollinearity. However, we also learned that (as often is the case with thresholds) more care may be required. 
-
-Overall we learned that multicollinearity can bias our regression findings and it is good practice to check for multicollinearity when performing regression analysis.  It is something to keep in mind when we encounter coefficient estimates that are unexpected. 
-
-Importantly this case study showcases how methodological details, like how we decide to parse our demographic variables can have great consequences on the results of our analyses. 
+This case study has introduced many concepts for data importation and data wrangling. To continue with this data to see more about data analysis and visualization see this next [case study](https://www.opencasestudies.org/ocs-bp-RTC-analysis/).
 
 
 # **Homework**
 *** 
 
-Ask students to remove one or more of the demographic variables with high VIF values from the Mustard and Lott-like panel data and perform the panel linear regression analysis again, as well as calculate the VIF values. 
-
-Ask the students to discuss how this possibly changed the results.
+Ask students to import and wrangle similar datasets to those used here.
 
 
 # **Additional Information**
 ***
 
-## Helpful Links
+## **Helpful Links**
 
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
-[Writing functions](https://r4ds.had.co.nz/functions.html){target="_blank"}   
-Also see [this case study](https://opencasestudies.github.io/ocs-bloomberg-vaping-case-study/){target="_blank"} for more information on writing functions      
-Please see [this case study](https://opencasestudies.github.io/ocs-bp-co2-emissions/){target="_blank"}  for more details on using `ggplot2`     
-[Longitudinal studies](https://www.bmj.com/about-bmj/resources-readers/publications/epidemiology-uninitiated/7-longitudinal-studies){target="_blank"}   
-[Panel data](https://en.wikipedia.org/wiki/Panel_data){target="_blank"}    
-[Confidence intervals](https://en.wikipedia.org/wiki/Confidence_interval){target="_blank"}   
-[Linear regression](https://en.wikipedia.org/wiki/Linear_regression){target="_blank"}  
-[panel regression analysis](https://en.wikipedia.org/wiki/Panel_analysis){target="_blank"}   
-[Hausmen test](https://en.wikipedia.org/wiki/Durbin%E2%80%93Wu%E2%80%93Hausman_test){target="_blank"} 
-[Resampling](https://en.wikipedia.org/wiki/Resampling_(statistics)){target="_blank"}   
-[Variance inflation factor (VIF)](https://en.wikipedia.org/wiki/Variance_inflation_factor){target="_blank"}   
-[$R^2$ coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination){target="_blank"}   
-[Ridge regression](https://en.wikipedia.org/wiki/Tikhonov_regularization){target="_blank"}  
-[LaTeX mathematical notation](https://www.calvin.edu/~rpruim/courses/s341/S17/from-class/MathinRmd.html)target="_blank"}   
-
-For more information on linear regression see this [book](https://rafalab.github.io/dsbook/linear-models.html#linear-regression-in-the-tidyverse){target="_blank"} and this [case study](https://opencasestudies.github.io/ocs-bp-diet/){target="_blank"}.
-
-For more information on the different types of panel regression models see this [book](https://bookdown.org/ccolonescu/RPoE4/panel-data-models.html),  [here](https://www.bauer.uh.edu/rsusmel/phd/ec1-15.pdf), and [here](https://sites.google.com/site/econometricsacademy/econometrics-models/panel-data-models).
-
-For more information on implementing panel regression in R using the `plm` package, see [here](https://cran.r-project.org/web/packages/plm/vignettes/plmPackage.html){target="_blank"}  and [here](http://www.princeton.edu/~otorres/Panel101R.pdf){target="_blank"}.
-
-For more information on multicollinearity and VIF, see this [article](https://link.springer.com/content/pdf/10.1007/s11135-006-9018-6.pdf){target="_blank"}.DOI 10.1007/s11135-006-9018-6
 
 The articles used to motivate this case study are:   
 [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"}  
 [Donohue, et al.](https://www.nber.org/papers/w23510.pdf){target="_blank"}     
 [See here for a list of studies on this topic ](https://en.wikipedia.org/wiki/More_Guns,_Less_Crime){target="_blank"}  
 
-avocadoPossible tutorials about plm: (not sure if we want to include or not)  
-https://rpubs.com/rslbliss/fixed_effects  
-http://karthur.org/2019/implementing-fixed-effects-panel-models-in-r.html  
+<u>**Packages used in this case study:** </u>
 
+Package   | Use in this case study                                                                        
+---------- |-------------
+[here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
+[readxl](https://readxl.tidyverse.org/){target="_blank"}      | to import the data in the excel files 
+[readr](https://readr.tidyverse.org/){target="_blank"}      | to import the CSV file data
+[pdftools](https://github.com/ropensci/pdftools){target="_blank"} | to import data from a pdf file
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}      | to arrange/filter/select/compare specific subsets of the data  
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"} | to use the compound assignment pipe operator `%<>%`
+[tidyr](https://tidyr.tidyverse.org/){target="_blank"}      | to rearrange data in wide and long formats 
+[stringr](https://stringr.tidyverse.org/articles/stringr.html){target="_blank"}    | to manipulate the character strings within the data  
+[purrr](https://purrr.tidyverse.org/){target="_blank"}   | to import the data in all the different excel and csv files efficiently
+[forcats](https://forcats.tidyverse.org/){target="_blank"}    | to allow for reordering of factors in plots
+[tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with `dplyr`/`stringr`/`tidyr`/`purrr`
 
-avocado possible discussion about if and when high vif values are a problem:
-https://statisticalhorizons.com/multicollinearity
-
-## Session Info
+## **Session Info**
 
 ```{r}
 sessionInfo()
 ```
 
-## Acknowledgements
+## **Acknowledgements**
 
 We would like to acknowledge [Daniel Webster](https://www.jhsph.edu/faculty/directory/profile/739/daniel-webster) for assisting in framing the major direction of the case study.
 
