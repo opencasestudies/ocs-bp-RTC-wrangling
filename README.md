@@ -1,11 +1,20 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-OpenCaseStudies
-===============
+OpenCaseStudies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1
+====================================================================================================
 
 <!-- badges: start -->
 [![R build
 status](https://github.com/opencasestudies/ocs-bp-RTC-wrangling/workflows/R-CMD-check/badge.svg)](https://github.com/opencasestudies/ocs-bp-RTC-wrangling/actions)
 <!-- badges: end -->
+
+### Important links
+
+-   HTML:
+    <a href="https://www.opencasestudies.org/ocs-bp-RTC-wrangling" class="uri">https://www.opencasestudies.org/ocs-bp-RTC-wrangling</a>
+-   GitHub:
+    <a href="https://github.com/opencasestudies/ocs-bp-RTC-wrangling" class="uri">https://github.com/opencasestudies/ocs-bp-RTC-wrangling</a>
+-   Bloomberg American Health Initiative:
+    <a href="https://americanhealth.jhu.edu/open-case-studies" class="uri">https://americanhealth.jhu.edu/open-case-studies</a>
 
 ### Disclaimer
 
@@ -30,8 +39,8 @@ United States License.
 
 To cite this case study:
 
-Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub,
-Margaret and Hicks, Stephanie. (2020).
+Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret
+and Hicks, Stephanie. (2020).
 <a href="https://github.com/opencasestudies/ocs-bp-RTC-wrangling" class="uri">https://github.com/opencasestudies/ocs-bp-RTC-wrangling</a>.
 Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun
 Laws Part 1 (Version v1.0.0).

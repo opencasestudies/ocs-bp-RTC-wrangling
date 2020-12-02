@@ -18,7 +18,7 @@ output:
 
 <style>
 #TOC {
-  background: url("https://opencasestudies.github.io/img/logo.jpg");
+  background: url("https://opencasestudies.github.io/img/icon-bahi.png");
   background-size: contain;
   padding-top: 240px !important;
   background-repeat: no-repeat;
@@ -48,19 +48,24 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 ####
 
-## {.disclaimer_block}
+#### {.disclaimer_block}
 
 **Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given data set, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
+####
 
-## {.license_block}
+#### {.license_block}
 
 This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 [(CC BY-NC 3.0)](https://creativecommons.org/licenses/by-nc/3.0/us/){target="_blank"}  United States License.
 
-## {.reference_block}
+####
+
+#### {.reference_block}
 
 To cite this case study please use:
 
-Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wrangling.  Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1 (Version v1.0.0).
+Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-RTC-wrangling.  Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1 (Version v1.0.0).
+
+####
 
 # **Motivation**
 *** 
@@ -273,6 +278,7 @@ library(forcats)
 library(tibble)
 ```
 
+<u>**Packages used in this case study:** </u>
 
   Package   | Use in this case study                                                                        
 ---------- |-------------
@@ -376,6 +382,8 @@ STATE_FIPS <- read_xls("docs/State_FIPS_codes/state-geocodes-v2014.xls", skip = 
 ```
 
 ## **Police staffing data**
+***
+
 The following data was downloaded from the [Federal Bureau of Investigation](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs). 
 
 
@@ -395,7 +403,7 @@ ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
 
 
 ## **Unemployment data**
-
+***
 The following data was downloaded from the [U.S. Bureau of Labor Statistics](https://data.bls.gov/cgi-bin/dsrv?la). 
 
 There are excel files for each state.  As you can see, there are many rows to skip to make sure that there are the same number of columns for each row. We can also see that the state name is located in a couple of the first rows. 
@@ -450,6 +458,8 @@ names(ue_rate_data) <- ue_rate_names
 ```
 
 ## **Poverty data**
+***
+
 Extracted from Table 21 from [US Census Bureau Poverty Data ](https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-people.html)
 
 ```{r}
@@ -467,6 +477,7 @@ head(poverty_rate_data)
 We can see that this will require some wrangling to make the data more usable. 
 
 ## **Violent crime**
+***
 
 Violent crime data was obtained from [here](https://www.ucrdatatool.gov/Search/Crime/State/StatebyState.cfm) This data is a bit trickier because of spaces and `/` in the column names, thus the `read_lines()` function of the `readr` package works better than the `read_csv()` function.
 
@@ -484,6 +495,7 @@ head(crime_data)
 We can see that this data will also require some wrangling to make it more usable. 
 
 ## **Right-to-carry data**
+***
 
 This data is extracted from table in [Donohue paper](https://www.nber.org/papers/w23510.pdf) {target="_blank"}. We will use the function `pdf_text()`  of the `pdftools` package to import the pdf document.
 
@@ -507,6 +519,7 @@ Again, this data will also require quite a bit of wrangling.
 # **Data Wrangling**
 ***
 ## **State FIPS codes**
+***
 
 Let's first take a look at our state FIPS data to see if it needs any cleaning or reshaping. We should start with this data, because we will need to use it to wrangle some of the other data.
 
@@ -529,6 +542,7 @@ STATE_FIPS
 ```
 
 ## **Demographic and population data**
+***
 
 
 <details><summary> Click here to see detailed information about how the demographic data was wrangled </summary>
@@ -991,6 +1005,7 @@ OK, now we are ready to combine all of our demographic data together!
 <!-- </details> -->
 
 ## **Combining demographic data**
+***
 
 We can check that the column names are the same for the data for each of the decades by using the `setequal()` function of the `dplyr` package.
 
@@ -1141,6 +1156,7 @@ We can indeed check that we have the correct number of levels for `VARIABLE` usi
 ```
   
 ## **Combining population data**
+***
 
 We also have population data for each decade that came from wrangling the demographic data.
 
@@ -1178,6 +1194,7 @@ population_data %>%
 ```
 
 ## **Police staffing**
+***
 
 <details><summary> Click here to see details about how the police staffing data was wrangled. </summary>
 
@@ -1347,6 +1364,7 @@ ps_data
 
 
 ## **Unemployment**
+***
 
 The first thing we need to do with the unemployment data is combine the data across the different states.
  We can do that using the `bind_rows()` function of `dplyr` which appends the data together based on the presence of columns with the same name in the different tibbles. We will use the `map_df()` function of the `purrr` package to allow us to do this across each tibble in our list. We will then select just the annual data for each state and year and we will rename our variables to be consistent with some of other data that we are working with. Thus we would like our variables to be `YEAR`, `VALUE` and `VARIABLE` in all caps.
@@ -1368,8 +1386,7 @@ head(ue_rate_data)
 ```
 
 ## **Poverty rate**
-
-
+***
 
 <details><summary> Click here to see details about how the poverty data was wrangled </summary>
 
@@ -1592,8 +1609,7 @@ Looks great!
 
 
 ## **Violent crime**
-
-
+***
 
 <details><summary> Click here to see details about how the violent crime data was wrangled </summary>
 
@@ -1765,6 +1781,7 @@ crime_data <- crime_data %>%
 <!-- </details> -->
 
 ## **RTC laws**
+***
 
 <details><summary> Click here to see details about how the RTC Law data was wrangled </summary>
 
@@ -1910,7 +1927,7 @@ RTC
 ```
 
 ## **Joining Data**
-
+***
 
 Now we will join the data from the different data sets together to create a tibble of data for an analysis that will be similar to the data used by [Donohue et al.](https://www.nber.org/papers/w23510.pdf) {target="_blank"} and [Mustard and Lott](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=1150&context=law_and_economics){target="_blank"}.
 
@@ -1943,6 +1960,7 @@ map(data_list, checkyear)
 
 
 ## **Donohue, et al.**
+***
 
 We will now bind the demographic data that we made for the Donohue-like analysis called `dem_DONOHUE`, as well as all the other datasets that we have wrangled. This is possible because we have the same column names for each dataset. We will also use the `pivot_wider()` function of the `tidyr` package to change the shape of the data. This will make the data have more columns. Each unique value in the column called `VARIABLE` will be used to make new columns. and the values for each will come from the column called `VALUE`.
 
@@ -2055,6 +2073,7 @@ DONOHUE_DF %<>%
 
 
 ## **Mustard and Lott**
+***
 
 We will now bind the demographic data that we made for the Mustard and Lott analysis called `dem_Lott`, as well as all the other datasets that we have wrangled just as we did for the Donohue-like analysis. Again, this is possible because we have the same column names for each dataset. 
 
@@ -2189,6 +2208,7 @@ Ask students to import and wrangle similar datasets to those used here.
 ***
 
 ## **Helpful Links**
+***
 
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
 
@@ -2214,12 +2234,14 @@ Package   | Use in this case study
 [tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with `dplyr`/`stringr`/`tidyr`/`purrr`
 
 ## **Session Info**
+***
 
 ```{r}
 sessionInfo()
 ```
 
 ## **Acknowledgements**
+***
 
 We would like to acknowledge [Daniel Webster](https://www.jhsph.edu/faculty/directory/profile/739/daniel-webster) for assisting in framing the major direction of the case study.
 
