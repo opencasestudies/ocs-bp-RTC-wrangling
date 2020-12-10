@@ -2,11 +2,6 @@
 OpenCaseStudies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1
 ====================================================================================================
 
-<!-- badges: start -->
-[![R build
-status](https://github.com/opencasestudies/ocs-bp-RTC-wrangling/workflows/R-CMD-check/badge.svg)](https://github.com/opencasestudies/ocs-bp-RTC-wrangling/actions)
-<!-- badges: end -->
-
 ### Important links
 
 -   HTML:
