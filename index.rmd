@@ -67,6 +67,12 @@ Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hic
 
 ####
 
+To access the GitHub repository for this case study see here: https://github.com/opencasestudies/ocs-bp-RTC-wrangling.   
+This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).   
+See [this case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) for part 2 which includes a data analysis and information about data visualization.  
+
+
+
 # **Motivation**
 *** 
 
@@ -591,12 +597,12 @@ glimpse(dem_77_79)
 
 We also want to get data about the total population for the state for each year.
 
-To do so we can sum all the values for the `SUB_POP` variable that we just created. To do this we can use the `group_by` and `summarise()` functions of the `dplyr` package. The `group_by()` function specifies how we want to calculate  our sum, that we would like to calculate it for each year and each state individually. Thus, all the values that have the same `STATE` and `YEAR` values will be summed together, rather than summing using all of the values in the `SUB_POP` variable. The `.groups` argument allows us to remove the grouping after we perform the calculation with `summarise()`.
+To do so we can sum all the values for the `SUB_POP` variable that we just created. To do this we can use the `group_by` and `summarize()` functions of the `dplyr` package. The `group_by()` function specifies how we want to calculate  our sum, that we would like to calculate it for each year and each state individually. Thus, all the values that have the same `STATE` and `YEAR` values will be summed together, rather than summing using all of the values in the `SUB_POP` variable. The `.groups` argument allows us to remove the grouping after we perform the calculation with `summarize()`.
 
 ```{r}
 pop_77_79 <- dem_77_79 %>%
   group_by(YEAR, STATE) %>%
-  summarise("TOT_POP" = sum(SUB_POP), .groups = "drop") 
+  summarize("TOT_POP" = sum(SUB_POP), .groups = "drop") 
 
 pop_77_79 
 ```
@@ -684,7 +690,7 @@ dem_80_89 %<>%
                names_to = "AGE_GROUP",
                values_to = "SUB_POP_temp") %>%
   group_by(YEAR, STATE, AGE_GROUP, SEX, RACE) %>%
-  summarise(SUB_POP = sum(SUB_POP_temp), .groups="drop")
+  summarize(SUB_POP = sum(SUB_POP_temp), .groups="drop")
 
 dem_80_89
 ```
@@ -692,7 +698,7 @@ dem_80_89
 ```{r}
 pop_80_89 <- dem_80_89 %>%
   group_by(YEAR, STATE) %>%
-  summarise("TOT_POP" = sum(SUB_POP), .groups = "drop") 
+  summarize("TOT_POP" = sum(SUB_POP), .groups = "drop") 
 
 
 dem_80_89 <- dem_80_89 %>%
@@ -844,14 +850,14 @@ dem_90_99 %<>%
 
 dem_90_99 %<>%
   group_by(YEAR, STATE, AGE_GROUP, SEX, RACE) %>%
-  summarise(SUB_POP = sum(SUB_POP_temp), .groups="drop")
+  summarize(SUB_POP = sum(SUB_POP_temp), .groups="drop")
 
 ```
 
 ```{r}
 pop_90_99 <- dem_90_99 %>%
   group_by(YEAR, STATE) %>%
-  summarise(TOT_POP = sum(SUB_POP), .groups = "drop")
+  summarize(TOT_POP = sum(SUB_POP), .groups = "drop")
 
 dem_90_99 <- dem_90_99 %>%
   left_join(pop_90_99, by=c("YEAR", "STATE")) %>%
@@ -960,7 +966,7 @@ Now we will collapse the data for the different RACES and calculate a new `SUB_P
 ```{r}
 dem_00_10 %<>%
   group_by(YEAR, AGE_GROUP, STATE, SEX, RACE) %>%
-  summarise(SUB_POP = sum(SUB_POP_temp), .groups = "drop")
+  summarize(SUB_POP = sum(SUB_POP_temp), .groups = "drop")
 ```
 
 Again, the dimensions look as we expect with 60,588 rows. This time we have two levels of `SEX`, three levels of `Race`, **11** levels of `YEAR`, eighteen levels of `AGE_GROUP`, and fifty one levels of `STATE`. If we multiply this together we get 16,588. Looks good!
@@ -971,7 +977,7 @@ Now we will calculate the total population and percent of the total as we have d
 ```{r}
 pop_00_10 <- dem_00_10 %>%
   group_by(YEAR, STATE) %>%
-  summarise(TOT_POP = sum(SUB_POP), .groups = "drop")
+  summarize(TOT_POP = sum(SUB_POP), .groups = "drop")
 ```
 
 We can also check that our wrangling was performed correctly by summing the values for the individual sub-populations percentages and seeing if it totals to 100.
@@ -981,7 +987,7 @@ dem_00_10 %>%
   left_join(pop_00_10, by=c("YEAR", "STATE")) %>%
   group_by(YEAR, STATE) %>%
   mutate(PERC_SUB_POP = (SUB_POP/TOT_POP)*100) %>%
-  summarise(perc_tot = sum(PERC_SUB_POP), .groups = "drop") %>%
+  summarize(perc_tot = sum(PERC_SUB_POP), .groups = "drop") %>%
   mutate(poss_error = case_when(abs(perc_tot - 100) > 0 ~ TRUE,
                                 TRUE ~ FALSE)) %>%
   group_by(poss_error) %>%
@@ -1080,7 +1086,7 @@ We also want to create a new variable that will contain all the demographic info
 
 To do this we will modify the `AGE_GROUP` variable by using the `mutate()` function of the `dplyr` package. We will replace the spaces in the now two age group categories with and underscore using the `str_replace_all()` function of the `stringr` package which replaces all instances of a pattern in a character string. 
 
-Then we will use the `group_by()` function and the `summarise()` function also of the `dplyr` package to allow us to calculate a sum of the percentages for each of the sub-population percentages for the newly modified age groups in `AGE_GROUP`. The `.groups = "drop"` argument allows for the grouping to be removed after the `summarise()` function.
+Then we will use the `group_by()` function and the `summarize()` function also of the `dplyr` package to allow us to calculate a sum of the percentages for each of the sub-population percentages for the newly modified age groups in `AGE_GROUP`. The `.groups = "drop"` argument allows for the grouping to be removed after the `summarize()` function.
 
 ```{r}
 dem_DONOHUE %<>%
@@ -1088,7 +1094,7 @@ dem_DONOHUE %<>%
                                      pattern = " ", 
                                      replacement = "_")) %>%
   group_by(YEAR, STATE, RACE, SEX, AGE_GROUP) %>%
-  summarise(PERC_SUB_POP = sum(PERC_SUB_POP), .groups = "drop")
+  summarize(PERC_SUB_POP = sum(PERC_SUB_POP), .groups = "drop")
 
 dem_DONOHUE
 ```
@@ -1144,7 +1150,7 @@ dem_LOTT <- dem %>%
                                                         "85 years and over"))) %>%
   mutate(AGE_GROUP = str_replace_all(AGE_GROUP," ","_")) %>%
   group_by(YEAR, STATE, RACE, SEX, AGE_GROUP) %>%
-  summarise(PERC_SUB_POP = sum(PERC_SUB_POP), .groups = "drop") %>%
+  summarize(PERC_SUB_POP = sum(PERC_SUB_POP), .groups = "drop") %>%
   unite(col = "VARIABLE", RACE, SEX, AGE_GROUP, sep = "_") %>%
   rename("VALUE"=PERC_SUB_POP)
 ```
@@ -1226,12 +1232,12 @@ ps_data %<>%
 ps_data
 ```
 
-Now we also want to get collapse by `pub_agency_name` to get a total count for each year and each state. So we will do this by using the `group_by()` function and grouping by `data_year` and `state_abbr` and using the `summarise()` function to calculate a sum.
+Now we also want to get collapse by `pub_agency_name` to get a total count for each year and each state. So we will do this by using the `group_by()` function and grouping by `data_year` and `state_abbr` and using the `summarize()` function to calculate a sum.
 
 ```{r}
 ps_data %<>%
   group_by(data_year, state_abbr) %>%
-  summarise(officer_state_total=sum(officer_total), .groups = "drop")
+  summarize(officer_state_total=sum(officer_total), .groups = "drop")
 
 ps_data
 ```
@@ -2158,7 +2164,7 @@ length(levels(LOTT_DF$STATE))
 
 LOTT_DF <- LOTT_DF %>%
   group_by(STATE, YEAR) %>%
-  summarise_all(~na.omit(unique(.))) %>%
+  summarize_all(~na.omit(unique(.))) %>%
   ungroup() # This identifies unique observations, coalesces rows according to the grouping variable(s), and gets rid of of units that have incomplete data. This gives returns a dataframe with the most complete information.
 
 summary(as.factor(LOTT_DF$STATE)) 
@@ -2240,7 +2246,7 @@ Package   | Use in this case study
 sessionInfo()
 ```
 
-## **Acknowledgements**
+## **Acknowledgments**
 ***
 
 We would like to acknowledge [Daniel Webster](https://www.jhsph.edu/faculty/directory/profile/739/daniel-webster) for assisting in framing the major direction of the case study.

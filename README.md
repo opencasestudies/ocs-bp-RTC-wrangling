@@ -45,7 +45,7 @@ and Hicks, Stephanie. (2020).
 Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun
 Laws Part 1 (Version v1.0.0).
 
-### Acknowledgements
+### Acknowledgments
 
 We would like to acknowledge [Daniel
 Webster](https://www.jhsph.edu/faculty/directory/profile/739/daniel-webster)
