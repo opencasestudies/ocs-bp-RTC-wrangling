@@ -1,8 +1,10 @@
 ---
-title: "Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1"
+title: "Open Case Studies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1"
 css: style.css
 output:
   html_document:
+    includes:
+       in_header: GA_Script.Rhtml
     self_contained: yes
     code_download: yes
     highlight: tango
@@ -2204,7 +2206,7 @@ save(LOTT_DF, DONOHUE_DF, file = here::here("data", "Wrangled_data.rda"))
 This case study has introduced many concepts for data importation and data wrangling. To continue with this data to see more about data analysis and visualization see this next [case study](https://www.opencasestudies.org/ocs-bp-RTC-analysis/).
 
 
-# **Homework**
+# **Suggested Homework**
 *** 
 
 Ask students to import and wrangle similar datasets to those used here.
@@ -2252,4 +2254,6 @@ sessionInfo()
 We would like to acknowledge [Daniel Webster](https://www.jhsph.edu/faculty/directory/profile/739/daniel-webster) for assisting in framing the major direction of the case study.
 
 We would also like to acknowledge the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/) for funding this work. 
+
+<script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=080808&w=a&t=tt&d=vI10rVW0ZqOpNY1dHyXJ9lPO2-3L6pnK7j2fUymE4t0&co=ffffff&cmo=3acc3a&cmn=ff5353&ct=808080'></script>
 

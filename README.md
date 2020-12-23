@@ -1,4 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 OpenCaseStudies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1
 ====================================================================================================
 
