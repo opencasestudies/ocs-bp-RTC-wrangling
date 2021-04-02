@@ -337,28 +337,52 @@ Data   | Link
 
 To import the data we will use the `read_csv()` function of the `readr` package for the csv files. In some decades, there are separate files for each year, we will read each of these together using the base `list.files()` function to get all of the names for each file and then the `map()` function of the `purrr` package to apply the `read_csv()` function on all of the file paths in the list created by `list.files()`. For years that are txt files we will use `read_table2()` also for the `readr` package. The `read_table2()` function, unlike the `read_table()`,  allows for any number of white space characters between columns, and the lines can be of different lengths.
 
+We will save our data to a directory within our working directory called data. We will create subdirectories within this directory to organize our data. We can use the `here` function from the `here` package to make this process easier. The `here()` function allows us to specify the path or location of the document that we want to import, starting from the directory where a `.Rproj` file is located. In this case, we will import our files within subdirectories of  a directory called `raw` of the `data` directory. (*Note the next chunk of code will only work for you if you pull the repository from GitHub and set up your file structure in the same way.*) If you had trouble downloading the data from the orginal sources you can download them from our [GitHub repository for this case study](https://github.com/opencasestudies/ocs-bp-RTC-wrangling/tree/master/data).
+
+***
+
+<details> <summary> Click here to see more about creating new projects in RStudio. </summary>
+
+You can create a project by going to the File menu of RStudio like so:
+
+
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(here::here("img", "New_project.png"))
+```
+
+You can also do so by clicking the project button:
+
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(here::here("img", "project_button.png"))
+```
+
+See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
+
+</details>
+***
+</details>
+
+***
 
 ```{r}
 
-dem_77_79 <- read_csv("docs/Demographics/Decade_1970/pe-19.csv", skip = 5)
+dem_77_79 <- read_csv(here::here("data", "raw", "Demographics", "Decade_1970", "pe-19.csv"), skip = 5)
 
 dem_80_89 <- list.files(recursive = TRUE,
-                  path = "docs/Demographics/Decade_1980/",
+                  path = here("data", "raw", "Demographics", "Decade_1980"),
                   pattern = "*.csv",
                   full.names = TRUE) %>% 
   map(~read_csv(., skip=5))
 
 dem_90_99 <- list.files(recursive = TRUE,
-                  path = "docs/Demographics/Decade_1990/",
+                  path = here("data", "raw", "Demographics", "Decade_1990"),
                   pattern = "*.txt",
                   full.names = TRUE) %>% 
   map(~read_table2(., skip = 14))
 
 
-dem_00_10_2 <- read_csv("docs/Demographics/Decade_2000/st-est00int-alldata.csv")
-
 dem_00_10 <- list.files(recursive = TRUE,
-                  path = "docs/Demographics/Decade_2000/",
+                  path = here("data", "raw", "Demographics", "Decade_2000"),
                   pattern = "*.csv",
                    full.names = TRUE) %>% 
    map(~read_csv(.))
@@ -385,7 +409,7 @@ knitr::include_graphics(here("img", "FIPS.png"))
 ```
 
 ```{r}
-STATE_FIPS <- read_xls("docs/State_FIPS_codes/state-geocodes-v2014.xls", skip = 5)
+STATE_FIPS <- read_xls(here("data", "raw", "State_FIPS_codes", "state-geocodes-v2014.xls"), skip = 5)
 (STATE_FIPS)
 ```
 
@@ -398,12 +422,8 @@ The following data was downloaded from the [Federal Bureau of Investigation](htt
 The `read_csv()` function of the `readr` package guesses what the class is for each variable, but sometimes it makes mistakes. It is good to specify the class for variables if you know them. We know that we want the variables about male and female counts to be numeric. We can specify that using the `col_types =` argument. See [here](https://readr.tidyverse.org/articles/readr.html) and [here](https://cran.r-project.org/web/packages/readr/vignettes/readr.html) for more information.
 
 ```{r}
-ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv")
-ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
-                    col_types = cols(male_total_ct = "n",
-                                     female_total_ct = "n"))
 
-ps_data <- read_csv("docs/Police_staffing/pe_1960_2018.csv",
+ps_data <- read_csv(here("data", "raw", "Police_staffing", "pe_1960_2018.csv"),
                    col_types =  cols(male_total_ct = col_double(),
                                    female_total_ct = col_double()))
 ```
@@ -425,7 +445,7 @@ We can also see that here if we just try to read in the files directly.
 ```{r}
 
 ue_rate_data <- list.files(recursive = TRUE,
-                  path = "docs/Unemployment",
+                  path = here("data", "raw", "Unemployment"),
                   pattern = "*.xlsx",
                   full.names = TRUE) %>% 
   map(~read_xlsx(.))
@@ -438,7 +458,7 @@ So now we will skip the first 10 lines. And also create a names tibble that cont
 ```{r}
  
  ue_rate_data <- list.files(recursive = TRUE,
-                  path = "docs/Unemployment",
+                  path = here("data", "raw", "Unemployment"),
                   pattern = "*.xlsx",
                   full.names = TRUE) %>% 
   map(~read_xlsx(., skip = 10))
@@ -450,7 +470,7 @@ To get the state name for each file using the `map()` function to perform functi
 
 ```{r}
 ue_rate_names <- list.files(recursive = TRUE,
-                  path = "docs/Unemployment",
+                  path = here("data", "raw", "Unemployment"),
                   pattern = "*.xlsx",
                   full.names = TRUE) %>%
   map(~read_xlsx(., range = "B4:B6")) %>%
@@ -468,7 +488,7 @@ names(ue_rate_data) <- ue_rate_names
 ## **Poverty data**
 ***
 
-Extracted from Table 21 from [US Census Bureau Poverty Data ](https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-people.html)
+Extracted from Table 21 from [US Census Bureau Poverty Data ](https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-people.html).
 
 ```{r}
 
@@ -477,7 +497,7 @@ Extracted from Table 21 from [US Census Bureau Poverty Data ](https://www.census
 #solution to above is alledgedly: "In any case the suggested approach is to initialize the column"
 
 
-poverty_rate_data <- read_xls("docs/Poverty/hstpov21.xls", skip=2) #This may cause initialization issue, not easily reproducible (even after restarting R)
+poverty_rate_data <- read_xls(here("data", "raw", "Poverty", "hstpov21.xls"), skip=2) #This may cause initialization issue, not easily reproducible (even after restarting R)
 
 head(poverty_rate_data)
 ```
@@ -487,7 +507,7 @@ We can see that this will require some wrangling to make the data more usable.
 ## **Violent crime**
 ***
 
-Violent crime data was obtained from [here](https://www.ucrdatatool.gov/Search/Crime/State/StatebyState.cfm) This data is a bit trickier because of spaces and `/` in the column names, thus the `read_lines()` function of the `readr` package works better than the `read_csv()` function.
+Violent crime data was obtained from [here](https://www.ucrdatatool.gov/Search/Crime/State/StatebyState.cfm). This data is a bit trickier because of spaces and `/` in the column names, thus the `read_lines()` function of the `readr` package works better than the `read_csv()` function.
 
 
 ```{r}
@@ -495,7 +515,7 @@ knitr::include_graphics(here("img", "crime.png"))
 ```
 
 ```{r}
-crime_data <- read_lines("docs/Crime/CrimeStatebyState.csv", skip = 2, skip_empty_rows = TRUE)
+crime_data <- read_lines(here("data", "raw", "Crime", "CrimeStatebyState.csv"), skip = 2, skip_empty_rows = TRUE)
 head(crime_data)
 
 ```
@@ -505,16 +525,16 @@ We can see that this data will also require some wrangling to make it more usabl
 ## **Right-to-carry data**
 ***
 
-This data is extracted from table in [Donohue paper](https://www.nber.org/papers/w23510.pdf) {target="_blank"}. We will use the function `pdf_text()`  of the `pdftools` package to import the pdf document.
+This data is extracted from table in [Donohue paper](https://www.nber.org/papers/w23510.pdf){target="_blank"}. We will use the function `pdf_text()`  of the `pdftools` package to import the pdf document.
 
 ```{r}
 
-if(!file.exists(here("docs", "w23510.pdf"))){
+if(!file.exists(here("data", "raw", "w23510.pdf"))){
   url <- "https://www.nber.org/papers/w23510.pdf"
-  utils::download.file(url, here("docs", "w23510.pdf"))
+  utils::download.file(url, here("data", "raw", "w23510.pdf"))
 }
 
-DAWpaper <- pdf_text(here("docs", "w23510.pdf"))
+DAWpaper <- pdf_text(here("data", "raw", "w23510.pdf"))
 
 head(DAWpaper[1])
 
@@ -522,10 +542,63 @@ head(DAWpaper[1])
 
 Again, this data will also require quite a bit of wrangling.
 
+Before we move on, we will save our data so that we can pick up from this point. 
+
+```{r}
+save(dem_77_79, dem_80_89, dem_90_99, dem_00_10, #demographic data
+     STATE_FIPS, # codes for states 
+     ps_data, # police staffing data
+     ue_rate_data, # unemployment data
+     poverty_rate_data, # poverty data
+     crime_data, # crime data
+     DAWpaper, file = here("data", "imported", "imported_data.rda"))
+
+```
+
 
 
 # **Data Wrangling**
 ***
+
+If you have been following along but stopped. You can start here again with the following code:
+
+```{r}
+load(here::here("data", "imported", "imported_data.rda"))
+```
+
+***
+<details> <summary> If you skipped the data import section click here. </summary>
+
+An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-RTC-wrangling/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-RTC-wrangling/master/data/imported/impoted_data.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily. 
+
+```{r}
+load(here::here("data", "imported", "imported_data.rda"))
+```
+
+
+***
+<details> <summary> Click here to see more about creating new projects in RStudio. </summary>
+
+You can create a project by going to the File menu of RStudio like so:
+
+
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(here::here("img", "New_project.png"))
+```
+
+You can also do so by clicking the project button:
+
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(here::here("img", "project_button.png"))
+```
+
+See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
+
+</details>
+***
+</details>
+***
+
 ## **State FIPS codes**
 ***
 
@@ -552,7 +625,7 @@ STATE_FIPS
 ## **Demographic and population data**
 ***
 
-
+***
 <details><summary> Click here to see detailed information about how the demographic data was wrangled </summary>
 
 
@@ -588,6 +661,7 @@ glimpse(dem_77_79)
 ```
 
 That's looking pretty  good! We also want to take all the age group variables and make one variable that is the age group name and one that is the value of the population count for that age group. To do this we will use the `pivot_longer()` function of the `tidyr` package. To use this function, we need to use the `cols` argument to indicate which columns we want to pivot. We also name the new variables we will create with the `names_to` and `values_to` arguments. The `names_to` will be the name of the variable that will identify each age group and `values_to` will be the name of the variable that contains the corresponding population values.
+
 ```{r}
 dem_77_79 <- dem_77_79 %>%
   pivot_longer(cols=contains("years"),
@@ -628,6 +702,7 @@ dem_77_79 %<>%
 
 dem_77_79
 ```
+
 It is important to make sure that we have the total values we would expect. We have two levels of `SEX`, three levels of `Race`, three levels of `YEAR`, eighteen levels of `AGE_GROUP`, and fifty one levels of `STATE`. If we multiply this together we get 16,524 which is the same as the number of rows in our final `dem_77_79` data. Looks good!
 
 Also Let's make the values of the `SEX` variable capitalized so that they match the other values of the other variables like `RACE` etc. This will help us to keep consistent values across the different years as we wrangle the data for the other decades. To do so we will use the `str_to_title()` function of the `stringr` package. We need to use the `pull()` function to get the values of `SEX` out of `dem_77_79`. Once we make them capitalized they are then reassigned to the `SEX` variable. 
@@ -1010,7 +1085,9 @@ dem_00_10
 
 OK, now we are ready to combine all of our demographic data together!
 
-<!-- </details> -->
+</details>
+
+***
 
 ## **Combining demographic data**
 ***
@@ -1307,12 +1384,10 @@ state_abb_data %<>%
                             replacement = "NB"))
 ```
 
-#### {.scrollable }
 ```{r}
-# Scroll through the output!
 state_abb_data %>% print(n = 50)
 ```
-####
+
 
 
 We need to add DC to this. We will use the `add_row()` function of `dplyr` to do this.  We just need to specify values for both of the variables.
@@ -1367,8 +1442,8 @@ ps_data %<>%
 ps_data
 ```
 
-<!-- </details> -->
-
+</details>
+***
 
 
 ## **Unemployment**
@@ -1394,9 +1469,11 @@ head(ue_rate_data)
 ```
 
 ## **Poverty rate**
+
 ***
 
-<details><summary> Click here to see details about how the poverty data was wrangled </summary>
+***
+<details><summary> Click here to see details about how the poverty data was wrangled. </summary>
 
 OK, now for wrangling the poverty data. First let's take a look at it. 
 ```{r}
@@ -1467,16 +1544,15 @@ As you can see in the [RStudio cheatsheet](https://rstudio.com/resources/cheatsh
 knitr::include_graphics(here("img", "regex.png"))
 ```
 
-#### {.scrollable }
+
 
 ```{r}
-# Scroll through the output!
 poverty_rate_data %>% 
   filter(str_detect(STATE, "[:digit:]")) %>%
   print(n = 51)
 ```
 
-####
+
 
 Some of the years (2013 and 2017) are listed twice with a number in parentheses, others are just listed once with a number in parentheses. Looking at the technical documentation, this seems to do with updates to the definition of poverty and to the methods used to estimate poverty levels. See [here](https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-footnotes/cps-historic-footnotes.html){target="_blank"} and [here](https://www2.census.gov/programs-surveys/cps/techdocs/cpsmar19.pdf){target="_blank"} for more information. We will simply select one of the sets of data for 2013 and 2017.
 
@@ -1491,15 +1567,14 @@ First let's add the year value to our data.
 
 There should be consistently data for 51 states (including DC). We can see that sometimes DC is spelled out and sometimes it is not.
 
-#### {.scrollable }
+
 ```{r}
-### Scroll through the output!
 poverty_rate_data %>% 
   filter(str_detect(STATE, "[:alpha:]")) %>%
   distinct(STATE) %>% print(n = 100)
 
 ```
-####
+
 
 
 Now we will replace `"D.C."` with `"District of Columbia"` using `str_replace()`. We can use the `tally()` function of the `dplyr` package to check that we have fewer now.
@@ -1524,15 +1599,14 @@ poverty_rate_data %>%
 
 There are 41 different sets of data according to year values.
 
-#### {.scrollable }
+
 ```{r}
-### Scroll through the output!
 poverty_rate_data %>% 
   filter(str_detect(STATE, "[:alpha:]")) %>%
   count(STATE) %>% 
   print(n = 51)
 ```
-####
+
 
 Indeed, looks like each of the states are repeated the same number of times!
 
@@ -1556,12 +1630,11 @@ poverty_rate_data %<>%
   select(-length_state)
 ```
 
-#### {.scrollable }
+
 ```{r}
-#Scroll through the output!
 poverty_rate_data %>% print(n = 100)
 ```
-####
+
 
 Looks good! Now we will remove the rows that have just the year values by only preserving those with alpha characters.
 
@@ -1587,11 +1660,11 @@ poverty_rate_data %<>%
   mutate(YEAR = str_sub(pull(., year_value), start = 1, end=4))
 ```
 
-#### {.scrollable }
+
 ```{r}
 poverty_rate_data 
 ```
-####
+
 
 Looks good! Now we will just remove the extra variables and rename the variables we want to keep to be similar to our other data.
 
@@ -1612,13 +1685,15 @@ head(poverty_rate_data)
 Looks great! 
 
 
-<!-- </details> -->
+</details>
+***
 
 
 
 ## **Violent crime**
 ***
 
+***
 <details><summary> Click here to see details about how the violent crime data was wrangled </summary>
 
 The `crime_data` was imported using `read_lines()` and we have some lines that we don't necessarily need. A large amount of the original data is notes at the end of the table. We want to remove these lines. We can determine where they start by searching for the row that contains the first statement of these notes using the `str_which()` function of the `stringr` package. We will subtract one from this as there is a blank line in between.
@@ -1736,61 +1811,14 @@ crime_data <- crime_data_sep %>%
 crime_data
 ```
 
-
-
-
-from Michael:
-
-```{r, eval = FALSE}
-crime_data2 <- data.frame(cbind(crime_data2, rep(1:(length(crime_data2)/rep_cycle_cut),each=rep_cycle_cut)))
-
-colnames(crime_data) <- c("String","STATE_GROUP")
-
-crime_data <- crime_data %>%
-  group_by(STATE_GROUP) %>%
-  group_split()
-
-columns_crime_data <- 8
-
-crime_data <- crime_data %>%
-  map(~mutate(.,
-               State = case_when(str_detect(String, "Estimated crime in ") ~ substring(String, nchar("Estimated crime in ")+1)),
-              row_id = row_number())) %>%
-  map(~fill(., State)) %>%
-  map(~filter(.,row_id > 2)) %>%
-  map(~mutate(.,
-              String = paste0(String, ",", State))) %>%
-  map(~dplyr::select(.,String)) %>%
-  map(~str_split_fixed(.$String,",",columns_crime_data + 1)) %>%
-  map(~data.frame(.)) %>%
-  map(~rename(.,"YEAR"=X1,
-              "Extra_col1"=X2,
-              "VC"=X3,
-              "Extra_col2"=X4,
-              "Extra_col3"=X5,
-              "Extra_col4"=X6,
-              "Extra_col5"=X7,
-              "Extra_col6"=X8,
-              "STATE"=X9)) %>%
-  map(~dplyr::select(.,-contains("Extra_col"))) %>%
-  map(~.x %>% mutate_all(~trimws(.,which = "both"))) %>%
-  map_df(bind_rows)
-
-sapply(crime_data, class)
-
-crime_data <- crime_data %>%
-  mutate(VARIABLE = "Viol_crime_count") %>%
-  rename("VALUE" = VC) %>%
-  as.tibble() %>%
-  mutate(YEAR = as.numeric(YEAR),
-         VALUE = as.numeric(VALUE))
-```
-
-<!-- </details> -->
-
-## **RTC laws**
+</details>
 ***
 
+
+## **Right-to-carry laws**  
+***
+
+***
 <details><summary> Click here to see details about how the RTC Law data was wrangled </summary>
 
 
@@ -1933,6 +1961,9 @@ p_62 <- p_62 %>%
 RTC <-p_62
 RTC
 ```
+
+</details>
+***
 
 ## **Joining Data**
 ***
@@ -2143,61 +2174,15 @@ setequal(DONOHUE_DF %>% distinct(YEAR),
 ```
 
 
-Looks as expected! we have 
-
-from Michael:
-```{r, eval = FALSE}
-LOTT_DF %>%
-  group_by(YEAR) %>%
-  tally() %>%
-  filter(n != 51) %>%
-  print(n=dim(.)[1])
-
-summary(as.factor(LOTT_DF$STATE))
-
-max(LOTT_DF$YEAR) - min(LOTT_DF$YEAR) + 1
-
-LOTT_DF <- LOTT_DF %>%
-  mutate(STATE = fct_collapse(STATE, "District of Columbia" = c("District of Columbia","D.C.")))
-
-summary(as.factor(LOTT_DF$STATE))
-  
-length(levels(LOTT_DF$STATE))
-
-LOTT_DF <- LOTT_DF %>%
-  group_by(STATE, YEAR) %>%
-  summarize_all(~na.omit(unique(.))) %>%
-  ungroup() # This identifies unique observations, coalesces rows according to the grouping variable(s), and gets rid of of units that have incomplete data. This gives returns a dataframe with the most complete information.
-
-summary(as.factor(LOTT_DF$STATE)) 
-
-baseline_year <- min(LOTT_DF$YEAR)
-censoring_year <- max(LOTT_DF$YEAR)
-
-# Need to fix this to ensure severe bias is not introduced by prevalent "cases"
-
-LOTT_DF <- LOTT_DF %>%
-  mutate(TIME_0 = baseline_year,
-         TIME_INF = censoring_year) %>%
-  filter(RTC_LAW_YEAR > TIME_0)
-
-LOTT_DF <- LOTT_DF %>%
-  mutate(Viol_crime_rate_1k = (Viol_crime_count*1000)/Population,
-         Viol_crime_rate_1k_log = log(Viol_crime_rate_1k),
-         Population_log = log(Population))
-
-summary(droplevels(as.factor(LOTT_DF$STATE)))
-
-length(summary(droplevels(as.factor(LOTT_DF$STATE))))
-```
+Looks as expected! 
 
 
 Now we will save our wrangled data for the part 2 case study:
 
-We can use the `here()` function of the `here` package to easily save this in a directory called `data` within the directory where are .Rproj file is located.
+We can use the `here()` function of the `here` package to easily save this in a directory called `wrangled` within the `data` directory within the directory where are .Rproj file is located.
 
-```{r, eval = FALSE}
-save(LOTT_DF, DONOHUE_DF, file = here::here("data", "Wrangled_data.rda"))
+```{r}
+save(LOTT_DF, DONOHUE_DF, file = here::here("data", "wrangled", "wrangled_data.rda"))
 ```
 
 # **Summary**
@@ -2213,6 +2198,7 @@ Ask students to import and wrangle similar datasets to those used here.
 
 
 # **Additional Information**
+
 ***
 
 ## **Helpful Links**
