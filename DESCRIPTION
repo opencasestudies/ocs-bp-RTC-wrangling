@@ -1,0 +1,28 @@
+Description: Open Case Studies: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1
+License: CC BY-NC 3.0
+Authors@R: c(
+    person(c("Stephanie", "C."), "Hicks", role = c("aut", "cre"),
+    email = "shicks19@jhu.edu",
+    person("Carrie", "Wright", role = "aut"))
+Package: ocsbprtcwrangling
+Type: package
+Title: Influence of Multicollinearity on Measured Impact of Right-to-Carry Gun Laws Part 1
+Version: 0.99.0
+Depends: R (>= 4.0)
+Imports:
+    here,
+    readxl,
+    readr,
+    pdftools,
+    dplyr,  
+    magrittr,
+    tidyr,
+    stringr,
+    purrr,
+    forcats,
+    tibble,
+    knitr, 
+    dplyr,
+    rmarkdown
+VignetteBuilder: knitr
+Encoding: UTF-8
