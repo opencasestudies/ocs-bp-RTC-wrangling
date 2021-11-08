@@ -642,14 +642,10 @@ STATE_FIPS
 ## **Demographic and population data**
 ***
 
-***
-<details><summary> Click here to see detailed information about how the demographic data was wrangled </summary>
 
-
-<font size="6"> **1977-1979**</font>
+### **1977-1979**
 
 ***
-
 
 Now let's take a look at our demographic data across the decades that we wish to study. If you have very wide data (meaning it has many columns), one way to view the data so that you can see all of the columns at the same time is to use the `glimpse()` function of the `dplyr` package. 
 
@@ -734,7 +730,7 @@ dem_77_79 %<>%
   mutate(SEX = str_to_title(pull(., SEX)))
 ```
 
-<font size="6"> **1980-1989**</font>
+### **1980-1989**
 
 ***
 
@@ -814,7 +810,7 @@ Again, it is important to make sure that we have the total values we would expec
 
 If we multiply these together we get 55,080, which is the same as the number of rows of the final `dem_80_89` data. Looks good!
 
-<font size="6"> **1990-1999**</font>
+### **1990-1999**
 
 ***
 
@@ -966,7 +962,7 @@ Again, we should check to make sure that we have the total values we would expec
 
 Indeed it looks like we have 55,080 rows, which is what we would expect and is the same as the number of rows of the final `dem_80_89` data. Looks good!
 
-<font size="6"> **2000-2010**</font>
+### **2000-2010**
 
 ***
 
@@ -1102,7 +1098,7 @@ dem_00_10
 
 OK, now we are ready to combine all of our demographic data together!
 
-</details>
+
 
 ***
 
