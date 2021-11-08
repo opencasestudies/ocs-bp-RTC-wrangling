@@ -645,6 +645,7 @@ STATE_FIPS
 
 ### **1977-1979**
 
+***
 
 Now let's take a look at our demographic data across the decades that we wish to study. If you have very wide data (meaning it has many columns), one way to view the data so that you can see all of the columns at the same time is to use the `glimpse()` function of the `dplyr` package. 
 
