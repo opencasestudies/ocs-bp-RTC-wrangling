@@ -436,13 +436,13 @@ STATE_FIPS <- read_xls(here("data", "raw", "State_FIPS_codes", "state-geocodes-v
 The following data was downloaded from the [Federal Bureau of Investigation](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs). 
 
 
-The `read_csv()` function of the `readr` package guesses what the class is for each variable, but sometimes it makes mistakes. It is good to specify the class for variables if you know them. We know that we want the variables about male and female counts to be numeric. We can specify that using the `col_types =` argument. See [here](https://readr.tidyverse.org/articles/readr.html) and [here](https://cran.r-project.org/web/packages/readr/vignettes/readr.html) for more information.
+The `read_csv()` function of the `readr` package guesses what the class is for each variable, but sometimes it makes mistakes. It is good to specify the class for variables if you know them. We know that we want the variables about male and female counts to be numeric. We can specify that using the `col_types =` argument. See [here](https://readr.tidyverse.org/articles/readr.html) and [here](https://cran.r-project.org/web/packages/readr/vignettes/readr.html) for more information. We can also indicate that empty values should be evaluated as NA values, as there are many empty values. 
 
 ```{r}
 
 ps_data <- read_csv(here("data", "raw", "Police_staffing", "pe_1960_2018.csv"),
                    col_types =  cols(male_total_ct = col_double(),
-                                   female_total_ct = col_double()))
+                                   female_total_ct = col_double()), na = c(""))
 ```
 
 
@@ -1296,7 +1296,14 @@ population_data %>%
 
 <details><summary> Click here to see details about how the police staffing data was wrangled. </summary>
 
-OK, now we will wrangle the police staffing data. We want to limit the data to only the years of interest. Then we will also replace NA values with zero for the `male_total_ct` and `female_total_ct` variables using the `replace_na()` function of the `tidyr` package. We will also, use the `across()` function of the `dplyr` package to select and mutate both of these columns in this way. Since both of these variables have `total_ct` in the name and no other variables do, we can use the `contains()` function of the `dplyr` package to specify that we want to use these columns instead of listing both out.
+OK, now we will wrangle the police staffing data. We want to limit the data to only the years of interest. Then we will also replace NA values with zero for the `male_total_ct` and `female_total_ct` variables using the `replace_na()` function of the `tidyr` package. This is because we plan to sum up the number of employees for different agencies within a state to obtain a total state value (like the previous analyses as you can see in the table again below). In these analyses, the number of employees was used which is why we are using these particular columns.
+
+```{r, echo=FALSE, out.height = '100%', out.width = '100%', fig.align='center'}
+knitr::include_graphics(here("img", "ourdata.png"))
+```
+
+
+We will use the `across()` function of the `dplyr` package to select and mutate both of these columns. Since both of these variables have `total_ct` in the name and no other variables do, we can use the `contains()` function of the `dplyr` package to specify that we want to use these columns instead of listing both out.
 
 
 ```{r}
@@ -1310,16 +1317,16 @@ mutate(across(.cols =contains("total_ct"), ~replace_na(., 0)))
 glimpse(ps_data)
 ```
 
-Now we can create a new variable called `officer_total` which will be the sum of these variables. We will then keep just this variable as well as the `data_year`, `pub_agency_name`, and `state_abbr`.
+Now we can create a new variable called `police_emp_total` which will be the sum of these variables. We will then keep just this variable as well as the `data_year`, `pub_agency_name`, and `state_abbr`.
 
 ```{r}
 
 ps_data %<>%
-  mutate(officer_total = male_total_ct + female_total_ct) %>%
+  mutate(police_emp_total = male_total_ct + female_total_ct) %>%
   dplyr::select(data_year,
                 pub_agency_name,
                 state_abbr,
-                officer_total)
+                police_emp_total)
 
 ps_data
 ```
@@ -1329,7 +1336,7 @@ Now we also want to get collapse by `pub_agency_name` to get a total count for e
 ```{r}
 ps_data %<>%
   group_by(data_year, state_abbr) %>%
-  summarize(officer_state_total=sum(officer_total), .groups = "drop")
+  summarize(police_state_total=sum(police_emp_total), .groups = "drop")
 
 ps_data
 ```
@@ -1424,8 +1431,8 @@ Now we will rename the variables to match those of the other datasets.
 ```{r}
 ps_data %<>%
   rename(YEAR = "data_year",
-         VALUE = "officer_state_total") %>%
-  mutate(VARIABLE = "officer_state_total")
+         VALUE = "police_state_total") %>%
+  mutate(VARIABLE = "police_state_total")
 ps_data
 ```
 
@@ -2244,7 +2251,7 @@ Package   | Use in this case study
 ***
 
 ```{r}
-sessionInfo()
+devtools::session_info()
 ```
 
 ## **Acknowledgments**
