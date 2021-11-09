@@ -436,9 +436,9 @@ STATE_FIPS <- read_xls(here("data", "raw", "State_FIPS_codes", "state-geocodes-v
 The following data was downloaded from the [Federal Bureau of Investigation](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs). 
 
 
-The `read_csv()` function of the `readr` package guesses what the class is for each variable, but sometimes it makes mistakes. It is good to specify the class for variables if you know them. We know that we want the variables about male and female counts to be numeric. We can specify that using the `col_types =` argument. See [here](https://readr.tidyverse.org/articles/readr.html) and [here](https://cran.r-project.org/web/packages/readr/vignettes/readr.html) for more information. We can also indicate that empty values should be evaluated as NA values, as there are many empty values. 
+The `read_csv()` function of the `readr` package guesses what the class is for each variable, but sometimes it makes mistakes. It is good to specify the class for variables if you know them. We know that we want the variables about male and female counts to be numeric. We can specify that using the `col_types =` argument. See [here](https://readr.tidyverse.org/articles/readr.html) and [here](https://cran.r-project.org/web/packages/readr/vignettes/readr.html) for more information. We can also indicate that empty values should be evaluated as NA values, as there are many empty values. Note that this is a large file.
 
-```{r}
+```{r, eval = FALSE}
 
 ps_data <- read_csv(here("data", "raw", "Police_staffing", "pe_1960_2018.csv"),
                    col_types =  cols(male_total_ct = col_double(),
@@ -561,7 +561,7 @@ Again, this data will also require quite a bit of wrangling.
 
 Before we move on, we will save our data so that we can pick up from this point. 
 
-```{r}
+```{r, eval = FALSE}
 save(dem_77_79, dem_80_89, dem_90_99, dem_00_10, #demographic data
      STATE_FIPS, # codes for states 
      ps_data, # police staffing data
