@@ -588,7 +588,7 @@ load(here::here("data", "imported", "imported_data.rda"))
 
 An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-RTC-wrangling/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-RTC-wrangling/master/data/imported/impoted_data.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily. 
 
-```{r}
+```{r, eval = FALSE}
 load(here::here("data", "imported", "imported_data.rda"))
 ```
 
@@ -1792,7 +1792,7 @@ It appears that the data is comma separated with 8 columns. One of the middle co
 
 ```{r}
 crime_data_sep <-read_csv(crime_data, col_names = FALSE)
-head(crime_data)
+head(crime_data_sep)
 ```
 Nice! Now we just need our column names. Recall that we saved this information. 
 
