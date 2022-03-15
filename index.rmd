@@ -88,8 +88,45 @@ Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hic
 ####
 
 To access the GitHub repository for this case study see here: https://github.com/opencasestudies/ocs-bp-RTC-wrangling.   
+
+You may also access and download the data using our `OCSdata` package. To learn more about this package including examples, see this [link](https://github.com/opencasestudies/OCSdata). Here is how you would install this package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+```
+
 This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).   
 See [this case study](https://github.com/opencasestudies/ocs-bp-RTC-analysis) for part 2 which includes a data analysis and information about data visualization.  
+
+***
+
+The total reading time for this case study is calculated via [koRpus](https://github.com/unDocUMeantIt/koRpus) and shown below: 
+
+```{r, echo=FALSE}
+readtable = text_stats("index.Rmd") # producing reading time markdown table
+readtime = read.so::read.md(readtable) %>% dplyr::select(Method, koRpus) %>% # reading table into dataframe, selecting relevant factors
+  dplyr::filter(Method == "Reading time") %>% # dropping unnecessary rows
+  dplyr::mutate(koRpus = paste(round(as.numeric(stringr::str_split(koRpus, " ")[[1]][1])), "minutes")) %>% # rounding reading time estimate
+  dplyr::mutate(Method = "koRpus") %>% dplyr::relocate(koRpus, .before = Method) %>% dplyr::rename(`Reading Time` = koRpus) # reorganizing table
+knitr::kable(readtime, format="markdown")
+```
+
+***
+
+**Readability Score: **
+
+A readability index estimates the reading difficulty level of a particular text. Flesch-Kincaid, FORCAST, and SMOG are three common readability indices that were calculated for this case study via [koRpus](https://github.com/unDocUMeantIt/koRpus). These indices provide an estimation of the minimum reading level required to comprehend this case study by grade and age. 
+
+```{r, echo=FALSE}
+rt = wordcountaddin::readability("index.Rmd", quiet=TRUE) # producing readability markdown table
+df = read.so::read.md(rt) %>% dplyr::select(index, grade, age) %>%  # reading table into dataframe, selecting relevant factors
+  tidyr::drop_na() %>% dplyr::mutate(grade = round(as.numeric(grade)), # dropping rows with missing values, rounding age and grade columns
+                                     age = round(as.numeric(age))
+                                     )
+knitr::kable(df, format="markdown")
+```
+
+***
 
 Please help us by filling out our survey.
 
@@ -306,6 +343,7 @@ library(stringr)
 library(purrr)
 library(forcats)
 library(tibble)
+library(OCSdata)
 ```
 
 <u>**Packages used in this case study:** </u>
@@ -323,6 +361,7 @@ library(tibble)
 [purrr](https://purrr.tidyverse.org/){target="_blank"}   | to import the data in all the different excel and csv files efficiently
 [forcats](https://forcats.tidyverse.org/){target="_blank"}    | to allow for reordering of factors in plots
 [tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with `dplyr`/`stringr`/`tidyr`/`purrr`
+[OCSdata](https://github.com/opencasestudies/OCSdata){target="_blank"} | to access and download OCS data files
 
 # **What are the data?**
 ***
@@ -356,6 +395,18 @@ Data   | Link
 **years 1980 to 1989**  | [link](https://www2.census.gov/programs-surveys/popest/tables/1980-1990/counties/asrh/) * county data was used for this decade which also has state information
 **years 1990 to 1999**  | [link](https://www2.census.gov/programs-surveys/popest/tables/1990-2000/state/asrh/)
 **years 2000 to 2010**  | [link](https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-state.html) <br> [technical documentation](https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2000-2010/intercensal/state/st-est00int-alldata.pdf){target="_blank"}
+
+You may also download this data using the `OCSdata` package:
+
+```{r, eval=FALSE}
+# install.packages("OCSdata")
+library(OCSdata)
+raw_data("ocs-bp-RTC-wrangling", outpath = getwd())
+# This function creates a "OCSdata/data/raw" sub-directory in your current working directory.
+# The raw sub-directory contains the data files. 
+```
+
+*Note: there is a lot of raw data for this case study, so the function may take a few minutes to complete.* 
 
 To import the data we will use the `read_csv()` function of the `readr` package for the csv files. In some decades, there are separate files for each year, we will read each of these together using the base `list.files()` function to get all of the names for each file and then the `map()` function of the `purrr` package to apply the `read_csv()` function on all of the file paths in the list created by `list.files()`. For years that are txt files we will use `read_table2()` also for the `readr` package. The `read_table2()` function, unlike the `read_table()`,  allows for any number of white space characters between columns, and the lines can be of different lengths.
 
@@ -582,7 +633,7 @@ save(dem_77_79, dem_80_89, dem_90_99, dem_00_10, #demographic data
 # **Data Wrangling**
 ***
 
-If you have been following along but stopped. You can start here again with the following code:
+If you have been following along but stopped, you can start here again with the following code:
 
 ```{r}
 load(here::here("data", "imported", "imported_data.rda"))
@@ -591,7 +642,21 @@ load(here::here("data", "imported", "imported_data.rda"))
 ***
 <details> <summary> If you skipped the data import section click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-RTC-wrangling/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-RTC-wrangling/master/data/imported/impoted_data.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily. 
+First you need to install and load the `OCSdata` package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+library(OCSdata)
+```
+
+Then, you may load the imported data into your R environment using the following code:
+
+```{r, eval=FALSE}
+imported_data("ocs-bp-RTC-wrangling", outpath = getwd())
+load(here::here("OCSdata", "data", "imported", "imported_data.rda"))
+```
+
+If the package does not work for you, an RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-RTC-wrangling/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-RTC-wrangling/master/data/imported/impoted_data.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily. 
 
 ```{r, eval = FALSE}
 load(here::here("data", "imported", "imported_data.rda"))
@@ -2257,6 +2322,14 @@ Package   | Use in this case study
 
 ```{r}
 devtools::session_info()
+```
+
+**RMarkdown Compilation Time: **
+
+```{r, echo=FALSE}
+rmarkdown:::perf_timer_stop("render")
+pts = rmarkdown:::perf_timer_summary()
+cat("About", round(pts$time[1]/1000 + 10), "seconds")
 ```
 
 ## **Acknowledgments**
