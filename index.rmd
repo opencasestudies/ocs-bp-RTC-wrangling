@@ -37,7 +37,12 @@ knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
                       fig.align = "center", out.width = '90%')
 library(here)
 library(knitr)
+devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
+library(wordcountaddin)
+library(magrittr)
 
+rmarkdown:::perf_timer_reset_all()
+rmarkdown:::perf_timer_start("render")
 ```
 
 <!-- Open all links in new tab-->  
