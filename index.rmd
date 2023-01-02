@@ -1790,13 +1790,14 @@ head(crime_data)
 tail(crime_data)
 ```
 
-It appears that the data is comma separated with 8 columns. One of the middle columns often has no values, we need to fill these in with NAs. We can use the `read_csv()` function from the `readr` package to do this. It turns out you don't have to have a file, but you can also use a string our a vector.
+It appears that the data is comma separated with 8 columns. One of the middle columns often has no values, we need to fill these in with NAs. We can use the `read_table()` function from the `readr` package to do this. It turns out you don't have to have a file, but you can also use a character string vector. To do so, we need to specify with the `I()` function that this is not a file but literal data. We can figure this out by typing `?read_csv` in the console of RStudio to see help information for this function and the arguments for the function. It states:
+"Literal data is most useful for examples and tests. To be recognised as literal data, the input must be either wrapped with I(), be a string containing at least one new line, or be a vector containing at least one string with a new line."
 
 ```{r}
-crime_data_sep <-read_csv(crime_data, col_names = FALSE)
+crime_data_sep <-read_csv(file = I(crime_data), col_names = FALSE)
 head(crime_data_sep)
 ```
-Nice! Now we just need our column names. Recall that we saved this information. 
+Nice- the data looks as expected with a column that is empty as the 6th column! We can confirm this by looking back at the image of the file above. Now we just need our column names. Recall that we saved this information. 
 
 ```{r}
 colnames_crime
