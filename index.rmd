@@ -39,6 +39,8 @@ library(here)
 library(knitr)
 remotes::install_github("opencasestudies/OCSdata")
 library(OCSdata)
+install.packages("devtools")
+devtools::install_github("sfirke/janitor")
 
 ```
 
